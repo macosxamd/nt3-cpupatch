@@ -1,0 +1,1336 @@
+;
+; KEYED SECTIONS.  These sections are provided for files where a selection
+; is made from a set of files and the chosen one is copied under a generic
+; name.  This can be used to update the hal.dll, ntoskrnl.exe, ntbootdd.sys,
+; ntdetect.com.
+;
+
+
+[FileKeyedClasses]
+    Hal            = hal.dll
+    Ntoskrnl       = ntoskrnl.exe
+    Ntdetect       = ntdetect.com
+
+[FilesKeyedSections]
+    FilesHal       = $(STF_HALDEST)
+    FilesNtoskrnl  = $(STF_WINDOWSSYSPATH)
+    FilesNtdetect  = $(STF_OSLDEST)
+
+[FilesHal]
+    HAL      = 1, HAL.DLL      , RENAME=$(NEWFILE)
+    HAL486C  = 1, HAL486C.DLL  , RENAME=$(NEWFILE)
+    HALAST   = 1, HALAST.DLL   , RENAME=$(NEWFILE)
+    HALCBUS  = 1, HALCBUS.DLL  , RENAME=$(NEWFILE)
+    HALMCA   = 1, HALMCA.DLL   , RENAME=$(NEWFILE)
+    HALNCR   = 1, HALNCR.DLL   , RENAME=$(NEWFILE)
+    HALOLI   = 1, HALOLI.DLL   , RENAME=$(NEWFILE)
+    HALSP    = 1, HALSP.DLL    , RENAME=$(NEWFILE)
+    HALWYSE7 = 1, HALWYSE7.DLL , RENAME=$(NEWFILE)
+
+[FilesNtoskrnl]
+    NTKRNLMP = 1, NTKRNLMP.EXE , RENAME=$(NEWFILE)
+    NTOSKRNL = 1, NTOSKRNL.EXE , RENAME=$(NEWFILE)
+
+[FilesNtdetect]
+    NTDETECT = 1, NTDETECT.COM , RENAME=$(NEWFILE)
+
+[FileSections]
+    FilesPrimary        = C:
+    FilesOsLoader       = $(STF_OSLDEST)
+    FilesPal            = $(STF_HALDEST)
+    FilesWinnt          = $(STF_WINDOWSPATH)
+    FilesSystem32       = $(STF_WINDOWSSYSPATH)
+    FilesOs2Dll         = $(STF_WINDOWSSYSPATH)\os2\dll
+    FilesSystem         = $(STF_WINDOWSPATH)\system
+    FilesDrivers        = $(STF_WINDOWSSYSPATH)\drivers
+    FilesConfig         = $(STF_WINDOWSSYSPATH)\config
+    FilesWinspool       = $(STF_WINDOWSSYSPATH)\spool
+    FilesPrnDriver      = $(STF_WINDOWSSYSPATH)\spool\drivers\$(!STF_PRNPLATFORM)
+    FilesPrnProc        = $(STF_WINDOWSSYSPATH)\spool\prtprocs\$(!STF_PRNPLATFORM)
+    FilesDbgCom         = $(STF_WINDOWSPATH)\symbols\com
+    FilesDbgCpl         = $(STF_WINDOWSPATH)\symbols\cpl
+    FilesDbgDll         = $(STF_WINDOWSPATH)\symbols\dll
+    FilesDbgDrv         = $(STF_WINDOWSPATH)\symbols\drv
+    FilesDbgExe         = $(STF_WINDOWSPATH)\symbols\exe
+    FilesDbgScr         = $(STF_WINDOWSPATH)\symbols\scr
+    FilesDbgSys         = $(STF_WINDOWSPATH)\symbols\sys
+
+
+[FileSectionsCopyAlways]
+    FilesSystem32CopyAlways = $(STF_WINDOWSSYSPATH)
+    FilesOs2DllCopyAlways   = $(STF_WINDOWSSYSPATH)\os2\dll
+    FilesDriversCopyAlways  = $(STF_WINDOWSSYSPATH)\drivers
+
+;
+; product specific sections
+;
+
+[FileSectionsWINNT]
+    FilesInfWinnt       = $(STF_WINDOWSSYSPATH)
+
+[FileSectionsLANMANNT]
+    FilesInfLanmanNT    = $(STF_WINDOWSSYSPATH)
+
+;
+; FilesPrimary only covers ntldr.  For ntbootddd, a keyed section needs to
+; be created.  Only relevant for x86.
+;
+[FilesPrimary]
+1 = 2, NTLDR       , RENAME=$(NEWFILE)
+
+[FilesOsLoader]
+
+[FilesPal]
+
+[FilesWinnt]
+
+[FilesSystem32]
+1 = 1, ACLCONV.EXE , RENAME=$(NEWFILE)
+2 = 1, ALRSVC.DLL  , RENAME=$(NEWFILE)
+3 = 2, ATI.DLL     , RENAME=$(NEWFILE)
+4 = 2, ATSVC.EXE   , RENAME=$(NEWFILE)
+5 = 2, AUTOCHK.EXE , RENAME=$(NEWFILE)
+6 = 2, AUTOCONV.EXE, RENAME=$(NEWFILE)
+7 = 2, BASESRV.DLL , RENAME=$(NEWFILE)
+8 = 2, BROWSER.DLL , RENAME=$(NEWFILE)
+9 = 2, CLIPBRD.EXE , RENAME=$(NEWFILE)
+10 = 2, COMDLG32.DLL, RENAME=$(NEWFILE)
+11 = 2, CSRSRV.DLL  , RENAME=$(NEWFILE)
+12 = 2, DEMIL32.DLL , RENAME=$(NEWFILE)
+13 = 2, DGCONFIG.DLL, RENAME=$(NEWFILE)
+14 = 2, DLCAPI.DLL  , RENAME=$(NEWFILE)
+15 = 2, DOSX.EXE    , RENAME=$(NEWFILE)
+16 = 2, DRIVERS.DLL , RENAME=$(NEWFILE)
+17 = 2, DRWTSN32.EXE, RENAME=$(NEWFILE)
+18 = 2, EVENTLOG.EXE, RENAME=$(NEWFILE)
+19 = 2, EVENTVWR.EXE, RENAME=$(NEWFILE)
+20 = 2, FRAMEBUF.DLL, RENAME=$(NEWFILE)
+21 = 2, FTPSVC.EXE  , RENAME=$(NEWFILE)
+22 = 2, GDI.EXE     , RENAME=$(NEWFILE)
+23 = 2, GDI32.DLL   , RENAME=$(NEWFILE)
+24 = 2, HPMON.DLL   , RENAME=$(NEWFILE)
+25 = 3, IFSUTIL.DLL , RENAME=$(NEWFILE)
+26 = 3, IPXROUTE.EXE, RENAME=$(NEWFILE)
+27 = 3, KB16.COM    , RENAME=$(NEWFILE)
+28 = 3, KBDPO.DLL   , RENAME=$(NEWFILE)
+29 = 3, KERNEL32.DLL, RENAME=$(NEWFILE)
+30 = 3, KRNL386.EXE , RENAME=$(NEWFILE)
+31 = 3, LMUICMN0.DLL, RENAME=$(NEWFILE)
+32 = 3, LMUICMN1.DLL, RENAME=$(NEWFILE)
+33 = 3, LOCALSPL.DLL, RENAME=$(NEWFILE)
+34 = 3, LSASRV.DLL  , RENAME=$(NEWFILE)
+35 = 3, LSASS.EXE   , RENAME=$(NEWFILE)
+36 = 3, MGMTAPI.DLL , RENAME=$(NEWFILE)
+37 = 3, MSPRIVS.DLL , RENAME=$(NEWFILE)
+38 = 3, MSSCHD32.DLL, RENAME=$(NEWFILE)
+39 = 3, MSV1_0.DLL  , RENAME=$(NEWFILE)
+40 = 3, MUSRMGR.EXE , RENAME=$(NEWFILE)
+41 = 3, NCPA.CPL    , RENAME=$(NEWFILE)
+42 = 4, NETAPI32.DLL, RENAME=$(NEWFILE)
+43 = 4, NETLOGON.DLL, RENAME=$(NEWFILE)
+44 = 4, NETRAP.DLL  , RENAME=$(NEWFILE)
+45 = 4, NTBACKUP.EXE, RENAME=$(NEWFILE)
+46 = 4, NTDLL.DLL   , RENAME=$(NEWFILE)
+47 = 4, NTVDM.EXE   , RENAME=$(NEWFILE)
+48 = 4, NWLNKCFG.DLL, RENAME=$(NEWFILE)
+49 = 4, NWLNKMSG.DLL, RENAME=$(NEWFILE)
+50 = 4, NWLNKSVC.EXE, RENAME=$(NEWFILE)
+51 = 4, NWNBLINK.DLL, RENAME=$(NEWFILE)
+52 = 4, NWNBLINK.EXE, RENAME=$(NEWFILE)
+53 = 5, OS2.EXE     , RENAME=$(NEWFILE)
+54 = 5, OS2SRV.EXE  , RENAME=$(NEWFILE)
+55 = 5, OS2SS.EXE   , RENAME=$(NEWFILE)
+56 = 5, PERFCTRS.DLL, RENAME=$(NEWFILE)
+57 = 5, PERFMON.EXE , RENAME=$(NEWFILE)
+58 = 5, PORTUAS.EXE , RENAME=$(NEWFILE)
+59 = 5, PROGMAN.EXE , RENAME=$(NEWFILE)
+60 = 5, RASADMIN.EXE, RENAME=$(NEWFILE)
+61 = 5, RASCAUTH.DLL, RENAME=$(NEWFILE)
+62 = 5, RASGTWY.DLL , RENAME=$(NEWFILE)
+63 = 5, REDIR.EXE   , RENAME=$(NEWFILE)
+64 = 5, RPCLTC3.DLL , RENAME=$(NEWFILE)
+65 = 5, RPCLTC6.DLL , RENAME=$(NEWFILE)
+66 = 5, RPCRT4.DLL  , RENAME=$(NEWFILE)
+67 = 5, S3.DLL      , RENAME=$(NEWFILE)
+68 = 5, SAMLIB.DLL  , RENAME=$(NEWFILE)
+69 = 5, SAMSRV.DLL  , RENAME=$(NEWFILE)
+70 = 5, SCREG.EXE   , RENAME=$(NEWFILE)
+71 = 5, SENDFL32.DLL, RENAME=$(NEWFILE)
+72 = 5, SFMMON.DLL  , RENAME=$(NEWFILE)
+73 = 5, SFMPRINT.EXE, RENAME=$(NEWFILE)
+74 = 5, SFMSVC.EXE  , RENAME=$(NEWFILE)
+75 = 5, SFMWSHAT.DLL, RENAME=$(NEWFILE)
+76 = 5, SHELL32.DLL , RENAME=$(NEWFILE)
+77 = 5, SNMP.EXE    , RENAME=$(NEWFILE)
+78 = 5, SRVMGR.CPL  , RENAME=$(NEWFILE)
+79 = 4, SRVMGR.EXE  , RENAME=$(NEWFILE)
+80 = 4, SRVSVC.DLL  , RENAME=$(NEWFILE)
+81 = 4, TCPIPSVC.DLL, RENAME=$(NEWFILE)
+82 = 1, TELNET.DLL  , RENAME=$(NEWFILE)
+83 = 6, TERMINAL.EXE, RENAME=$(NEWFILE)
+84 = 6, UFAT.DLL    , RENAME=$(NEWFILE)
+85 = 6, UHPFS.DLL   , RENAME=$(NEWFILE)
+86 = 6, UNTFS.DLL   , RENAME=$(NEWFILE)
+87 = 6, UPS.EXE     , RENAME=$(NEWFILE)
+88 = 6, USER.EXE    , RENAME=$(NEWFILE)
+89 = 6, USER32.DLL  , RENAME=$(NEWFILE)
+90 = 6, USERINIT.EXE, RENAME=$(NEWFILE)
+91 = 6, USRMGR.EXE  , RENAME=$(NEWFILE)
+92 = 6, WIN32SPL.DLL, RENAME=$(NEWFILE)
+93 = 6, WINDISK.EXE , RENAME=$(NEWFILE)
+94 = 6, WINFILE.EXE , RENAME=$(NEWFILE)
+95 = 6, WINLOGON.EXE, RENAME=$(NEWFILE)
+96 = 6, WINMSD.EXE  , RENAME=$(NEWFILE)
+97 = 6, WINMSDP.EXE , RENAME=$(NEWFILE)
+98 = 6, WINSPOOL.DRV, RENAME=$(NEWFILE)
+99 = 7, WINSRV.DLL  , RENAME=$(NEWFILE)
+100 = 7, WINSTRM.DLL , RENAME=$(NEWFILE)
+101 = 7, WINVER.EXE  , RENAME=$(NEWFILE)
+102 = 7, WOW32.DLL   , RENAME=$(NEWFILE)
+103 = 7, WSHNWLNK.DLL, RENAME=$(NEWFILE)
+104 = 7, WSOCK32.DLL , RENAME=$(NEWFILE)
+105 = 7, XACTSRV.DLL , RENAME=$(NEWFILE)
+
+[FilesOs2Dll]
+1 = 3, DOSCALLS.DLL, RENAME=$(NEWFILE)
+
+[FilesSystem]
+
+[FilesDrivers]
+1 = 3, 4MMDAT.SYS  , RENAME=$(NEWFILE)
+2 = 3, ABIOSDSK.SYS, RENAME=$(NEWFILE)
+3 = 3, AFD.SYS     , RENAME=$(NEWFILE)
+4 = 3, ARCHQIC.SYS , RENAME=$(NEWFILE)
+5 = 5, ARROW.SYS   , RENAME=$(NEWFILE)
+6 = 5, ASYNCMAC.SYS, RENAME=$(NEWFILE)
+7 = 5, ATDISK.SYS  , RENAME=$(NEWFILE)
+8 = 5, BROWSER.SYS , RENAME=$(NEWFILE)
+9 = 6, CDFS.SYS    , RENAME=$(NEWFILE)
+10 = 6, CPQARRAY.SYS, RENAME=$(NEWFILE)
+11 = 6, DIGIFEP5.SYS, RENAME=$(NEWFILE)
+12 = 6, DLC.SYS     , RENAME=$(NEWFILE)
+13 = 6, DPTSCSI.SYS , RENAME=$(NEWFILE)
+14 = 6, ELNK16.SYS  , RENAME=$(NEWFILE)
+15 = 6, ELNK3.SYS   , RENAME=$(NEWFILE)
+16 = 6, ELNKII.SYS  , RENAME=$(NEWFILE)
+17 = 6, ELNKMC.SYS  , RENAME=$(NEWFILE)
+18 = 6, EXABYTE1.SYS, RENAME=$(NEWFILE)
+19 = 7, FASTFAT.SYS , RENAME=$(NEWFILE)
+20 = 7, FD16_700.SYS, RENAME=$(NEWFILE)
+21 = 7, FLOPPY.SYS  , RENAME=$(NEWFILE)
+22 = 7, FTDISK.SYS  , RENAME=$(NEWFILE)
+23 = 7, I8042PRT.SYS, RENAME=$(NEWFILE)
+24 = 7, IBMTOK.SYS  , RENAME=$(NEWFILE)
+25 = 7, LANCE.SYS   , RENAME=$(NEWFILE)
+26 = 7, MUP.SYS     , RENAME=$(NEWFILE)
+27 = 7, MVAUDIO.SYS , RENAME=$(NEWFILE)
+28 = 8, NBF.SYS     , RENAME=$(NEWFILE)
+29 = 8, NBT.SYS     , RENAME=$(NEWFILE)
+30 = 8, NCR77C22.SYS, RENAME=$(NEWFILE)
+31 = 8, NCRC700.SYS , RENAME=$(NEWFILE)
+32 = 8, NCRC710.SYS , RENAME=$(NEWFILE)
+33 = 8, NDIS.SYS    , RENAME=$(NEWFILE)
+34 = 8, NE2000.SYS  , RENAME=$(NEWFILE)
+35 = 8, NE3200.SYS  , RENAME=$(NEWFILE)
+36 = 8, NETFLX.SYS  , RENAME=$(NEWFILE)
+37 = 8, NPEISA.SYS  , RENAME=$(NEWFILE)
+38 = 8, NPFS.SYS    , RENAME=$(NEWFILE)
+39 = 8, NTCX.SYS    , RENAME=$(NEWFILE)
+40 = 8, NTDOS.SYS   , RENAME=$(NEWFILE)
+41 = 8, NTFS.SYS    , RENAME=$(NEWFILE)
+42 = 8, NTXALL.SYS  , RENAME=$(NEWFILE)
+43 = 8, NTXEM.SYS   , RENAME=$(NEWFILE)
+44 = 8, NWLINK.SYS  , RENAME=$(NEWFILE)
+45 = 8, NWNBLINK.SYS, RENAME=$(NEWFILE)
+46 = 8, PARALLEL.SYS, RENAME=$(NEWFILE)
+47 = 8, PINBALL.SYS , RENAME=$(NEWFILE)
+48 = 8, PROTEON.SYS , RENAME=$(NEWFILE)
+49 = 8, RDR.SYS     , RENAME=$(NEWFILE)
+50 = 8, S3.SYS      , RENAME=$(NEWFILE)
+51 = 8, SCSIDISK.SYS, RENAME=$(NEWFILE)
+52 = 8, SCSIPORT.SYS, RENAME=$(NEWFILE)
+53 = 8, SERIAL.SYS  , RENAME=$(NEWFILE)
+54 = 8, SERMOUSE.SYS, RENAME=$(NEWFILE)
+55 = 8, SFMATALK.SYS, RENAME=$(NEWFILE)
+56 = 8, SFMSRV.SYS  , RENAME=$(NEWFILE)
+57 = 8, SRV.SYS     , RENAME=$(NEWFILE)
+58 = 8, STREAMS.SYS , RENAME=$(NEWFILE)
+59 = 9, TCPIP.SYS   , RENAME=$(NEWFILE)
+60 = 9, UBNEI.SYS   , RENAME=$(NEWFILE)
+61 = 9, ULTRA124.SYS, RENAME=$(NEWFILE)
+62 = 9, WDVGA.SYS   , RENAME=$(NEWFILE)
+
+[FilesConfig]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesWinspool]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesPrnDriver]
+1 = 6, HPDSKJET.DLL, RENAME=$(NEWFILE)
+2 = 6, JP350.DLL   , RENAME=$(NEWFILE)
+3 = 9, PSCRIPT.DLL , RENAME=$(NEWFILE)
+4 = 9, PSCRPTUI.DLL, RENAME=$(NEWFILE)
+
+[FilesPrnProc]
+1 = 5, WINPRINT.DLL, RENAME=$(NEWFILE)
+
+[FilesDbgCom]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesDbgCpl]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesDbgDll]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesDbgDrv]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesDbgExe]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesDbgScr]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesDbgSys]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesInfWinnt]
+1 = 6, OEMNADDS.INF, RENAME=$(NEWFILE)
+2 = 5, OEMNADLM.INF, RENAME=$(NEWFILE)
+3 = 7, OEMNADLT.INF, RENAME=$(NEWFILE)
+4 = 7, OEMNSVRA.INF, RENAME=$(NEWFILE)
+5 = 9, OEMNXPSM.INF, RENAME=$(NEWFILE)
+6 = 9, UTILITY.INF , RENAME=$(NEWFILE)
+
+[FilesInfLanmanNT]
+1 = 9, OEMNADDS.INF, RENAME=$(NEWFILE)
+2 = 9, OEMNADLM.INF, RENAME=$(NEWFILE)
+3 = 9, OEMNADLT.INF, RENAME=$(NEWFILE)
+4 = 9, OEMNSVRA.INF, RENAME=$(NEWFILE)
+5 = 9, OEMNXPSM.INF, RENAME=$(NEWFILE)
+6 = 9, UTILITY.INF , RENAME=$(NEWFILE)
+
+[FilesSystem32CopyAlways]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+[FilesOs2DllCopyAlways]
+1 = 9, NETAPI.OS2  , RENAME=NETAPI.DLL
+
+[FilesDriversCopyAlways]
+;    1 = 1, file1, RENAME=$(NEWFILE)
+;    2 = 1, file2, RENAME=$(NEWFILE)
+
+
+[ProcessorID]
+    ProcessorID_I386  = I386
+    ProcessorID_I486  = I486
+    ProcessorID_I586  = I586
+    ProcessorID_R4000 = R4000
+
+[UiVars]
+    STF_PLATFORMDET    = "" ? $(!LIBHANDLE) GetPlatform
+    STF_CSDVER         = 768
+    STF_BUILDVER       = 528
+
+    STF_PRIMARY        = "C:"
+    STF_NTDRIVE        = ""
+    STF_WINDOWSPATH    = "" ? $(!LIBHANDLE) GetWindowsNtDir
+    STF_WINDOWSSYSPATH = "" ? $(!LIBHANDLE) GetWindowsNtSysDir
+    STF_CONTROLSET     = CurrentControlSet
+    VolumeList         = {} ? $(!LIBHANDLE) GetHardDriveLetters
+    VolumeFSList       = {} ? $(!LIBHANDLE) GetHardDriveFileSystems
+    VolumeFreeList     = {} ? $(!LIBHANDLE) GetHardDriveFreeSpace
+    DisketteList       = {} ? $(!LIBHANDLE) GetFloppyDriveLetters
+
+    ;
+    ; Amount of free space (in MB) required on the winnt drive
+    ; before we'll do the upgrade patch.
+    ;
+[FreeSpaceI386]
+    RequiredFreeWinnt  = 25
+[FreeSpaceMips]
+    RequiredFreeWinnt  = 32
+[FreeSpaceAlpha]
+    RequiredFreeWinnt  = 27
+
+
+[NVRAMVars]
+    SystemPartition = "" ? $(!LIBHANDLE) GetNVRAMVar SYSTEMPARTITION
+    OsLoader        = "" ? $(!LIBHANDLE) GetNVRAMVar OSLOADER
+    OsLoadPartition = "" ? $(!LIBHANDLE) GetNVRAMVar OSLOADPARTITION
+    OsLoadFilename  = "" ? $(!LIBHANDLE) GetNVRAMVar OSLOADFILENAME
+
+;
+; INF LOGIC
+;
+
+[Shell Commands]
+
+    set-title "Windows NT Setup"
+    set-subst CR = "\r"
+    set-subst LF = "\n"
+    set STF_LANGUAGE = ENG
+    read-syms Strings
+    shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard1)
+    set BillboardPushed = TRUE
+
+    set !LIBHANDLE      = ""
+    set !PATCHLIBHANDLE = ""
+
+    ;
+    ; Initialize Library support for the inf
+    ;
+
+    install   LoadSetupLibrary
+
+    ;
+    ; find out the essential information about the installed hardware and
+    ; software
+    ;
+
+    read-syms ProductType
+    ifstr(i) $(!STF_PLATFORM) == I386
+        set STF_PRNPLATFORM = "w32x86"
+    else-ifstr(i) $(!STF_PLATFORM) == Mips
+        set STF_PRNPLATFORM = "w32mips"
+    else-ifstr(i) $(!STF_PLATFORM) == Alpha
+        set STF_PRNPLATFORM = "w32alpha"
+    endif
+
+    read-syms UiVars
+    detect    UiVars
+    read-syms FreeSpace$(!STF_PLATFORM)
+
+    ;
+    ; if the Platform is not the same as the one supported by this patch
+    ; diskette, inform the user and quit
+    ;
+    ;ifstr(i) $(STF_PLATFORM) != $(STF_PLATFORMDET)
+         ;ifstr(i) $(BillboardPushed) == TRUE
+             ;shell "subroutn.inf" PopBillboard
+             ;set BillboardPushed = FALSE
+         ;endif
+         ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(String1)
+         ;goto patchnotdone
+    endif
+
+    ;
+    ; Check to make sure we have admin privileges, if not print fatal error
+    ;
+
+    shell "registry.inf" CheckSetupModify
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        ; DEBUG
+        ;
+        ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Failed to shell CheckSetupModify"
+        ;
+        ; DEBUG END
+        ifstr(i) $(BillboardPushed) == TRUE
+            shell "subroutn.inf" PopBillboard
+            set BillboardPushed = FALSE
+        endif
+
+        Debug-Output "shelling CheckSetupModify failed"
+        goto patchnotdone
+    else-ifstr(i) $($R0) != STATUS_SUCCESSFUL
+        ifstr(i) $(BillboardPushed) == TRUE
+            shell "subroutn.inf" PopBillboard
+            set BillboardPushed = FALSE
+        endif
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "FATAL" $(String4)
+        goto patchnotdone
+    endif
+
+
+    ;
+    ; Initialize the patch library support for the inf
+    ;
+
+    install   LoadPatchLibrary
+
+    ;
+    ; find out if the system we are patching is checked / free using GetCheckedFree
+    ; and fail if we find a checked system.  ignore any errors in getting
+    ; checked/free status since this is not important.
+    ;
+    shell "" GetCheckedFree
+    ifint $($ShellCode) == $(!SHELL_CODE_OK)
+        ifstr(i) $($R0) == "STATUS_SUCCESSFUL"
+            ifstr(i) $($R1) == "checked"
+                shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "FATAL" $(String15)
+                goto patchnotdone
+            endif
+        endif
+    endif
+
+    ;
+    ; Get the build and patch version for the system.  If this is more than our patch
+    ; version warn the user, allowing him to exit
+    ;
+
+    LibraryProcedure STATUS,$(!PATCHLIBHANDLE), CheckBuildVersion $(!STF_BUILDVER)
+    ifstr(i) $(STATUS) == ERROR
+        goto patchnotdone
+    else-ifstr(i) $(STATUS) == NO
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) WARNING $(String8)
+        ifstr(i) $($R1) == "OK"
+            goto skip_patchvercheck
+        else
+            goto patchnotdone
+        endif
+    endif
+
+    shell "" GetCSDVersion
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        ifstr(i) $(BillboardPushed) == TRUE
+            shell "subroutn.inf" PopBillboard
+            set BillboardPushed = FALSE
+        endif
+        Debug-Output "PATCH.INF: Shelling GetCSDVersion failed"
+        goto patchnotdone
+    endif
+
+    ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        Debug-Output "PATCH.INF: GetCSDVersion failed to return a value"
+    else
+        ifint $($R1) > $(!STF_CSDVER)
+            ifstr(i) $(BillboardPushed) == TRUE
+                shell "subroutn.inf" PopBillboard
+                set BillboardPushed = FALSE
+            endif
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) WARNING $(String8)
+            ifstr(i) $($R1) == "OK"
+            else
+                goto patchnotdone
+            endif
+        endif
+    endif
+
+skip_patchvercheck = +
+
+    ;
+    ; Get the NT DRIVE
+    ;
+
+    GetDriveInPath !STF_NTDRIVE $(!STF_WINDOWSSYSPATH)
+
+    ;
+    ; Check for enough disk space.
+    ;
+
+    ifint *($(VolumeFreeList), ~($(VolumeList), $(!STF_NTDRIVE))) < $(RequiredFreeWinnt)
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) FATAL $(String13a)$(RequiredFreeWinnt)$(String13b)$(!STF_NTDRIVE)$(String13c)
+        goto patchnotdone
+    endif
+
+    ;
+    ; get the product type we are running on
+    ;
+
+    set STF_PRODUCT = ""
+    OpenRegKey $(!REG_H_LOCAL) "" "System\CurrentControlSet\Control\ProductOptions" 33554432 KeyProductOption
+    ifstr(i) $(KeyProductOption) != ""
+        GetRegValue $(KeyProductOption) "ProductType" ProductTypeList
+        set TempProductType = *($(ProductTypeList),4)
+        ifstr(i) $(TempProductType) == "winnt"
+            set !STF_PRODUCT = WINNT
+            set !PRODUCT_DIR = WINNT
+        else-ifstr(i) $(TempProductType) == "lanmannt"
+            set !STF_PRODUCT = LANMANNT
+            set !PRODUCT_DIR = NTAS
+        endif
+        CloseRegKey $(KeyProductOptions)
+    endif
+
+    ;
+    ; if we are unable to determine the product type print error and exit
+    ;
+
+    ifstr(i) $(STF_PRODUCT) == ""
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) FATAL $(String14)
+        goto patchnotdone
+    endif
+
+    ;
+    ; Find the hal and osloader destination on Mips and Alpha
+    ;
+
+    ifstr(i) $(!STF_PLATFORM) == I386
+        set STF_HALDEST = $(!STF_WINDOWSSYSPATH)
+        set STF_OSLDEST = C:\
+
+    else
+
+        read-syms NVRAMVars
+        detect    NVRAMVars
+        LibraryProcedure STATUS,$(!PATCHLIBHANDLE), GetOsLoaderDest         +
+                                                         $(SystemPartition) +
+                                                         $(OsLoader)        +
+                                                         $(OsLoadPartition) +
+                                                         $(OsLoadFilename)
+        ifstr(i) $(STATUS) == ERROR
+            goto patchnotdone
+        else
+            set STF_OSLDEST = $(STATUS)
+            set STF_HALDEST = $(STATUS)
+        endif
+    endif
+
+    ;
+    ; Get the required information about keyed files
+    ;
+
+    set KeyedClassKeys  = ^(FileKeyedClasses, 0)
+    set KeyedClassFiles = ^(FileKeyedClasses, 1)
+
+    LibraryProcedure STATUS,$(!PATCHLIBHANDLE), GetFileTypes $(KeyedClassFiles)
+    ifstr(i) $(STATUS) == ERROR
+        goto patchnotdone
+    else-ifstr(i) $(STATUS) == SETUPLOGNOTPRESENT
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) FATAL $(String11)
+        goto patchnotdone
+    else
+        ForListDo $(KeyedClassKeys)
+            set $($)Type = *($(STATUS), $(#))
+        EndForListDo
+    endif
+
+    ;
+    ; Warn the user about the patch process..
+    ;
+
+    ifstr(i) $(BillboardPushed) == TRUE
+        shell "subroutn.inf" PopBillboard
+        set BillboardPushed = FALSE
+    endif
+
+    shell "" QueryOkCancel $(String9)
+    ifstr(i) $($R1) == "OK"
+    else
+        set String = $(String12)
+        goto finish2
+    endif
+
+    shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard2)
+    set BillboardPushed = TRUE
+
+    ;
+    ; initialize copy
+    ;
+
+    set MoveFileExList  = {}
+
+
+    ;
+    ; Run through the directory list adding files to the copy list
+    ;
+
+    read-syms FileSections
+    set FileSectionsList = ^(FileSections, 0)
+    set FileSource  = $(!STF_SRCDIR)
+
+    ForListDo $(FileSectionsList)
+        set FileSection = $($)
+        set FileDest    = $($($))
+        set FileList    = ^($(FileSection), 0)
+        ForListDo $(FileList)
+            set FileKey = $($)
+            set File    = #($(FileSection), $(FileKey), 2)
+            set FileDestFullPath = $(FileDest)\$(File)
+
+            ;
+            ; Check to see if file exists, if it is does not exist, it doesn't
+            ; need to be copied over
+
+            LibraryProcedure STATUS,$(!LIBHANDLE),CheckFileExistance $(FileDestFullPath)
+            ifstr(i) $(STATUS) == YES
+
+
+                ; DEBUG
+                ;
+                ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Examining to see if file opened excl: "$(FileDestFullPath)
+                ;
+                ; DEBUG END
+
+                LibraryProcedure STATUS, $(!PATCHLIBHANDLE), IsFileOpenedExclusive $(FileDestFullPath)
+                ifstr(i) $(STATUS) == ERROR
+                    goto patchnotdone
+                else
+                    ifstr(i) $(STATUS) == "YES"
+                        LibraryProcedure NEWFILE, $(!PATCHLIBHANDLE), GenerateTemporary $(FileDest)
+                        ifstr(i) $(NEWFILE) == ERROR
+                            goto patchnotdone
+                        else
+                            set FileComp = {$(FileDest)\$(NEWFILE), $(FileDestFullPath)}
+
+                            ; DEBUG
+                            ;
+                            ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Adding to movefile ex list: "$(FileComp)
+                            ;
+                            ; DEBUG END
+
+                            set MoveFileExList = >($(MoveFileExList), $(FileComp))
+                        endif
+                    else
+                        set NEWFILE = $(File)
+                    endif
+
+                    ; DEBUG
+                    ;
+                    ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Copying File Section: "$(FileSection)" : Key: "$(FileKey)" Source: "$(FileSource)" Dest: "$(FileDest)" rename = "$(NEWFILE)
+                    ;
+                    ; DEBUG END
+
+                    install Install-File
+
+                endif
+            endif
+        EndForListDo
+    EndForListDO
+
+    ;
+    ; Add the keyed sections to the copy list
+    ;
+
+    read-syms FilesKeyedSections
+    set FileSource  = $(!STF_SRCDIR)
+    ForListDo $(KeyedClassKeys)
+        set FileSection = Files$($)
+        set FileDest    = $($(FileSection))
+        set FileKey     = $($($)Type)
+
+        set KeyedClassChoices = ^(Files$($), 0)
+        ifcontains(i) $(FileKey) in $(KeyedClassChoices)
+            set File             = #(FileKeyedClasses, $($), 1)
+            set FileDestFullPath = $(FileDest)\$(File)
+            ;
+            ; Check to see if file exists, if it is does not exist, it doesn't
+            ; need to be copied over
+
+            LibraryProcedure STATUS,$(!LIBHANDLE),CheckFileExistance $(FileDestFullPath)
+            ifstr(i) $(STATUS) == YES
+
+
+                ; DEBUG
+                ;
+                ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Examining to see if file opened excl: "$(FileDestFullPath)
+                ;
+                ; DEBUG END
+
+                LibraryProcedure STATUS, $(!PATCHLIBHANDLE), IsFileOpenedExclusive $(FileDestFullPath)
+                ifstr(i) $(STATUS) == ERROR
+                    goto patchnotdone
+                else
+                    ifstr(i) $(STATUS) == "YES"
+                        LibraryProcedure NEWFILE, $(!PATCHLIBHANDLE), GenerateTemporary $(FileDest)
+                        ifstr(i) $(NEWFILE) == ERROR
+                            goto patchnotdone
+                        else
+                            set FileComp = {$(FileDest)\$(NEWFILE), $(FileDestFullPath)}
+
+                            ; DEBUG
+                            ;
+                            ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Adding to movefile ex list: "$(FileComp)
+                            ;
+                            ; DEBUG END
+
+                            set MoveFileExList = >($(MoveFileExList), $(FileComp))
+                        endif
+                    else
+                        set NEWFILE = $(File)
+                    endif
+
+                    ; DEBUG
+                    ;
+                    ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Copying File Section: "$(FileSection)" : Key: "$(FileKey)" Source: "$(FileSource)" Dest: "$(FileDest)" rename = "$(NEWFILE)
+                    ;
+                    ; DEBUG END
+
+                    install Install-File
+
+                endif
+            endif
+
+
+
+        endif
+    EndForListDo
+
+    ;
+    ; add product specific files to the copy list
+    ;
+
+    read-syms FileSections$(STF_PRODUCT)
+    set FileSectionsList = ^(FileSections$(STF_PRODUCT), 0)
+    set FileSource  = $(!STF_SRCDIR)$(PRODUCT_DIR)
+    ForListDo $(FileSectionsList)
+        set FileSection = $($)
+        set FileDest    = $($($))
+        set FileList    = ^($(FileSection), 0)
+        ForListDo $(FileList)
+            set FileKey = $($)
+            set File    = #($(FileSection), $(FileKey), 2)
+            set FileDestFullPath = $(FileDest)\$(File)
+
+            ;
+            ; Check to see if file exists, if it is does not exist, it doesn't
+            ; need to be copied over
+
+            LibraryProcedure STATUS,$(!LIBHANDLE),CheckFileExistance $(FileDestFullPath)
+            ifstr(i) $(STATUS) == YES
+
+
+                ; DEBUG
+                ;
+                ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Examining to see if file opened excl: "$(FileDestFullPath)
+                ;
+                ; DEBUG END
+
+                LibraryProcedure STATUS, $(!PATCHLIBHANDLE), IsFileOpenedExclusive $(FileDestFullPath)
+                ifstr(i) $(STATUS) == ERROR
+                    goto patchnotdone
+                else
+                    ifstr(i) $(STATUS) == "YES"
+                        LibraryProcedure NEWFILE, $(!PATCHLIBHANDLE), GenerateTemporary $(FileDest)
+                        ifstr(i) $(NEWFILE) == ERROR
+                            goto patchnotdone
+                        else
+                            set FileComp = {$(FileDest)\$(NEWFILE), $(FileDestFullPath)}
+
+                            ; DEBUG
+                            ;
+                            ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Adding to movefile ex list: "$(FileComp)
+                            ;
+                            ; DEBUG END
+
+                            set MoveFileExList = >($(MoveFileExList), $(FileComp))
+                        endif
+                    else
+                        set NEWFILE = $(File)
+                    endif
+
+                    ; DEBUG
+                    ;
+                    ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "Copying File Section: "$(FileSection)" : Key: "$(FileKey)" Source: "$(FileSource)" Dest: "$(FileDest)" rename = "$(NEWFILE)
+                    ;
+                    ; DEBUG END
+
+                    install Install-File
+
+                endif
+            endif
+        EndForListDo
+    EndForListDO
+
+
+    ifstr(i) $(BillboardPushed) == TRUE
+        shell "subroutn.inf" PopBillboard
+        set BillboardPushed = FALSE
+    endif
+
+    ;
+    ; add the files which are always copied
+    ;
+    read-syms FileSectionsCopyAlways
+    set FileSectionsList = ^(FileSectionsCopyAlways, 0)
+    set FileSource  = $(!STF_SRCDIR)
+
+    ForListDo $(FileSectionsList)
+        set FileSection = $($)
+        set FileDest    = $($($))
+        set FileList    = ^($(FileSection), 0)
+        ForListDo $(FileList)
+            set FileKey = $($)
+            set File    = #($(FileSection), $(FileKey), 2)
+            set NEWFILE = $(File)
+            set FileDestFullPath = $(FileDest)\$(File)
+            install Install-File
+        EndForListDo
+    EndForListDO
+
+    ;
+    ; Do the copy
+    ;
+
+    read-syms ProgressCopy$(!STF_LANGUAGE)
+    install   Install-DoCopy
+    ifstr(i) $(STF_INSTALL_OUTCOME) == "STF_USERQUIT"
+        goto patchnotdone
+    else-ifstr(i) $(STF_INSTALL_OUTCOME) == "STF_FAILURE"
+        goto patchnotdone
+    endif
+
+processmovefileex=+
+    ;
+    ; Process MoveFileExList
+    ;
+
+    ForListDo $(MoveFileExList)
+        ;
+        set ExistingPath = *($($), 1)
+        set NewPath      = *($($), 2)
+
+        ; DEBUG
+        ;
+        ;shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "STATUS" "CopyFileOnReboot "$(ExistingPath)" to "$(NewPath)
+        ;
+        ; DEBUG END
+
+        LibraryProcedure STATUS, $(!PATCHLIBHANDLE), CopyFileOnReboot $(ExistingPath) $(NewPath)
+        ifstr(i) $(STATUS) == ERROR
+            goto patchnotdone
+        endif
+    EndForListDo
+
+
+patchdone =+
+    ifstr(i) $(BillboardPushed) == TRUE
+        shell "subroutn.inf" PopBillboard
+        set BillboardPushed = FALSE
+    endif
+
+    ;
+    ; do the registry modifications needed
+    ;
+
+    shell "" DoRegistryModifications $(!STF_CSDVER)
+    read-syms SetupDoneDlg$(!STF_LANGUAGE)
+    ui start "SetupDone"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ui pop 1
+        goto rebootend
+    else
+        ui pop 1
+        goto finish1
+    endif
+
+patchnotdone =+
+    set String = $(String2)
+finish2 =+
+    ifstr(i) $(BillboardPushed) == TRUE
+        shell "subroutn.inf" PopBillboard
+        set BillboardPushed = FALSE
+    endif
+
+    shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(String)
+    goto finish1
+
+finish1 =+
+    ;
+    ; Free the library support
+    ;
+
+    install   FreeSetupLibrary
+
+finish =+
+
+    install   FreePatchLibrary
+    exit
+
+rebootend =+
+    set Reboot = YES
+    install   Install-Shutdown
+    goto finish1
+    exit
+
+
+;-----------------------------------------------------------------------
+; INSTALL HELPERS
+;-----------------------------------------------------------------------
+
+[LoadPatchLibrary]
+    LoadLibrary "x" patchdll.dll !PATCHLIBHANDLE
+    exit
+
+[FreePatchLibrary]
+    ifstr(i) $(!PATCHLIBHANDLE) != ""
+        FreeLibrary $(!PATCHLIBHANDLE)
+    endif
+    exit
+
+[LoadSetupLibrary]
+    LoadLibrary "x" $(!STF_CWDDIR)setupdll.dll !LIBHANDLE
+    exit
+
+[FreeSetupLibrary]
+    ifstr(i) $(!LIBHANDLE) != ""
+        FreeLibrary $(!LIBHANDLE)
+    endif
+    exit
+
+[Install-File]
+    set STF_VITAL = ""
+    AddSectionKeyFileToCopyList $(FileSection) $(FileKey) $(FileSource) $(FileDest)
+    exit
+
+[Install-DoCopy]
+    CopyFilesInCopyList
+    exit
+
+
+[Install-Shutdown]
+    ;
+    LibraryProcedure STATUS,$(!LIBHANDLE),ShutdownSystem $(Reboot)
+    exit
+
+;-----------------------------------------------------------------------
+; REGISTRY SUBROUTINES
+;-----------------------------------------------------------------------
+
+[RegistryConstants]
+
+    MaskAllAccess          = 33554432
+    NoTitle                = 0
+    RegLastError           = $(!REG_ERROR_SUCCESS)
+
+;-----------------------------------------------------------------------
+; ROUTINE:      DoRegistryModifications
+;
+; DESCRIPTION:  Does the registry modifications needed.
+;               - Sets the compatibility flags for the postcript stuff
+;               - Creates an entry for the WinNT software.
+;
+; INPUTS:       $0:  CSD Version #
+;
+; OUTPUTS:      $R0: Status: STATUS_SUCCESSFUL
+;                            STATUS_FAILED
+;
+;------------------------------------------------------------------------
+
+[DoRegistryModifications]
+
+    set Status = STATUS_FAILED
+    read-syms RegistryConstants
+
+    ;
+    ; Modify the compatibility flags..
+    ;
+    set KeyPath   = { +
+                     {SOFTWARE,       $(NoTitle), $(MaskAllAccess)}, +
+                     {Microsoft,      $(NoTitle), $(MaskAllAccess)}, +
+                     {"Windows NT",   $(NoTitle), $(MaskAllAccess)}, +
+                     {CurrentVersion, $(NoTitle), $(MaskAllAccess)}, +
+                     {WOW,            $(NoTitle), $(MaskAllAccess)}, +
+                     {Compatibility,  $(NoTitle), $(MaskAllAccess)}  +
+                    }
+
+    ;
+    ; Form the value info structures for the WinNT entry
+    ;
+
+    set KeyValues = { +
+                     {PM4,  $(NoTitle), $(!REG_VT_SZ), "0x02004000" }, +
+                     {main123W, $(NoTitle), $(!REG_VT_SZ), "0x00004000" }, +
+                     {FH3, $(NoTitle), $(!REG_VT_SZ), "0x00004000" }  +
+                    }
+
+
+    shell "registry.inf" CreateKey $(!REG_H_LOCAL) $(KeyPath) $(KeyValues)
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        goto endCSDVersionCreate
+    endif
+    ifstr(i) $($R0) != STATUS_SUCCESSFUL
+        goto endCSDVersionCreate
+    else
+        CloseRegKey $($R1)
+    endif
+    ;
+    ; Form the path up to the version key
+    ;
+
+    set KeyPath   = { +
+                     {SOFTWARE,       $(NoTitle), $(MaskAllAccess)}, +
+                     {Microsoft,      $(NoTitle), $(MaskAllAccess)}, +
+                     {"Windows NT",   $(NoTitle), $(MaskAllAccess)}, +
+                     {CurrentVersion, $(NoTitle), $(MaskAllAccess)}  +
+                    }
+
+    ;
+    ; Form the value info structures for the WinNT entry
+    ;
+
+    set KeyValues = { +
+                     {CSDVersion, $(NoTitle), $(!REG_VT_DWORD), $($0) } +
+                    }
+
+
+    shell "registry.inf" CreateKey $(!REG_H_LOCAL) $(KeyPath) $(KeyValues)
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        goto endCSDVersionCreate
+    endif
+    ifstr(i) $($R0) != STATUS_SUCCESSFUL
+        goto endCSDVersionCreate
+    else
+        CloseRegKey $($R1)
+    endif
+
+    set Status = STATUS_SUCCESSFUL
+endCSDVersionCreate = +
+    Return $(Status)
+
+
+
+
+;-----------------------------------------------------------------------
+; ROUTINE:      GetCSDVersion
+;
+; DESCRIPTION:  Reads the software entry to find out what the CSD Patch Version
+;               is
+;
+; INPUTS:       $0:  None
+;
+; OUTPUTS:      $R0: Status: STATUS_SUCCESSFUL
+;                            STATUS_FAILED
+;
+;               $R1: CSDVersion
+;
+;------------------------------------------------------------------------
+
+[GetCSDVersion]
+
+    set Status = STATUS_SUCCESSFUL
+    read-syms RegistryConstants
+    set CSDVersion = 0
+
+    ;
+    ; Open the HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion
+    ; key
+
+    set KeyName = "Software\Microsoft\Windows NT\CurrentVersion"
+    OpenRegKey $(!REG_H_LOCAL) "" $(KeyName) $(!REG_KEY_READ) KeyHandle
+    ifint $(RegLastError) != $(!REG_ERROR_SUCCESS)
+        Debug-Output "REGISTRY.INF: Couldn't open windows nt software key for read access"
+        goto end_GetCSDVersion
+    endif
+
+    ;
+    ; read the csdversion entry
+    ;
+
+    GetRegValue $(KeyHandle) "CSDVersion" CSDVersionValue
+    ifint $(RegLastError) != $(!REG_ERROR_SUCCESS)
+        CloseRegKey $(KeyHandle)
+        goto end_GetCSDVersion
+    endif
+
+    set CSDVersion =  *($(CSDVersionValue), 4)
+    CloseRegKey $(KeyHandle)
+end_GetCSDVersion = +
+    Return $(Status) $(CSDVersion)
+
+
+;-----------------------------------------------------------------------
+; ROUTINE:      GetCheckedFree
+;
+; DESCRIPTION:  Reads the software entry to find out whether the system
+;               is checked / free.
+;
+; INPUTS:       $0:  None
+;
+; OUTPUTS:      $R0: Status: STATUS_SUCCESSFUL
+;                            STATUS_FAILED
+;
+;               $R1: Checked | Free
+;
+;------------------------------------------------------------------------
+
+[GetCheckedFree]
+
+    set Status = STATUS_SUCCESSFUL
+    read-syms RegistryConstants
+    set System = Free
+
+    ;
+    ; Open the HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion
+    ; key
+
+    set KeyName = "Software\Microsoft\Windows NT\CurrentVersion"
+    OpenRegKey $(!REG_H_LOCAL) "" $(KeyName) $(!REG_KEY_READ) KeyHandle
+    ifint $(RegLastError) != $(!REG_ERROR_SUCCESS)
+        Debug-Output "REGISTRY.INF: Couldn't open windows nt software key for read access"
+        goto end_GetCheckedFree
+    endif
+
+    ;
+    ; read the currenttype value
+    ;
+
+    GetRegValue $(KeyHandle) "CurrentType" CurrentTypeValue
+    ifint $(RegLastError) != $(!REG_ERROR_SUCCESS)
+        CloseRegKey $(KeyHandle)
+        goto end_GetCheckedFree
+    endif
+
+    ;
+    ; split the currenttype value and see if the split string has "free" or
+    ; "checked" in it
+    ;
+
+    Split-String *($(CurrentTypeValue), 4) " " CurrentTypeList
+    ForListDo $(CurrentTypeList)
+       ifstr(i) $($) == "free"
+          set System = free
+       else-ifstr(i) $($) == "checked"
+          set System = checked
+       endif
+    EndForListDo
+
+    CloseRegKey $(KeyHandle)
+end_GetCheckedFree = +
+    Return $(Status) $(System)
+
+
+;-----------------------------------------------------------------------
+; ROUTINE:      QueryOkCancel
+;
+; DESCRIPTION:  This routine lets the user query OK / Cancel giving OK as
+;               default
+;
+; INPUTS:       $0:  MessageText.
+;
+; OUTPUTS:      $R0: STATUS:   STATUS_SUCCESSFUL |
+;                              STATUS_NOLANGUAGE
+;                              STATUS_FAILED
+;
+;               $R1: DLGEVENT: OK | CANCEL
+;
+;------------------------------------------------------------------------
+
+[QueryOkCancel]
+
+    set DlgText = $($0)
+    read-syms QueryOKCancelDlg$(!STF_LANGUAGE)
+
+    ui start "SetupMessage"
+    ifstr(i) $(DLGEVENT) == "OK"
+        set Status     = STATUS_SUCCESSFUL
+        set UserAction = $(DLGEVENT)
+
+    else-ifstr(i) $(DLGEVENT) == "CANCEL"
+        set Status     = STATUS_SUCCESSFUL
+        set UserAction = $(DLGEVENT)
+    else
+        set Status     = STATUS_FAILED
+        set UserAction = "CANCEL"
+    endif
+    Return $(Status) $(UserAction)
+
+[ProductType]
+STF_PRODUCT  = Winnt
+STF_PLATFORM = I386
+
+;
+; MEDIA AND FILE DESCRIPTIONS
+;
+
+[Source Media Descriptions]
+    1  = "Windows NT 3.1 Update Disk #1"  , TAGFILE = disk1
+    2  = "Windows NT 3.1 Update Disk #2"  , TAGFILE = disk2
+    3  = "Windows NT 3.1 Update Disk #3"  , TAGFILE = disk3
+    4  = "Windows NT 3.1 Update Disk #4"  , TAGFILE = disk4
+    5  = "Windows NT 3.1 Update Disk #5"  , TAGFILE = disk5
+    6  = "Windows NT 3.1 Update Disk #6"  , TAGFILE = disk6
+    7  = "Windows NT 3.1 Update Disk #7"  , TAGFILE = disk7
+    8  = "Windows NT 3.1 Update Disk #8"  , TAGFILE = disk8
+    9  = "Windows NT 3.1 Update Disk #9"  , TAGFILE = disk9
+    10 = "Windows NT 3.1 Update Disk #10" , TAGFILE = disk10
+
+[Strings]
+
+
+    String1 = "This update disk cannot be used on this platform."
+    String2 = "Setup failed to update the system."
+    String3 = "Setup has successfully updated your system."
+    String4 = "You do not have permission to update the system.  Please contact your system administrator."
+    String5 = "Setup failed to setup your updated files for secure operation."
+    String6 = "No floppy disk drive was found on your computer. "+
+              "Setup cannot modify the Emergency Repair Disk."
+
+    String7 =  "If you created an Emergency Repair Disk during the initial installation"+
+               " of Windows NT, please insert it into Drive "
+
+    String10 = " and click OK to update the repair disk.  If you cannot locate the repair"+
+               " disk, select Cancel and Setup will complete the installation."
+
+    String8 = "Setup has detected that the version of the system installed is "+
+              "newer than the update you are applying to it.  The update can render "+
+              "your system unstartable.  Press OK if you still wish to continue "+
+              "or press Cancel to exit Setup."
+
+    ; PLEASE NOTE:
+    ; Change the language mentioned in variable String9 to the language
+    ; you are localizing to.  That is if the localized language is Spanish,
+    ; the word English should be changed to Espanol (?).
+    ;
+
+    String9 = "Setup is going to update your Windows NT system with the English "+
+              "version of the update program.  If you wish to cancel the update "+
+              "process, please press Cancel or press OK to continue."
+
+    String11 = "Setup couldn't find the setup.log file in your windows directory. "+
+               "Setup cannot proceed to update your system.  Please copy the repair.inf "+
+               "file from your Emergency Repair Disk to your windows directory under the "+
+               "name setup.log and restart the update."
+    String12 = "Setup has not updated your system.  If you wish to update your "+
+               "system please run the update utility again."
+
+    String13a = "Not enough hard disk space to run Setup.  Setup needs at least "
+    String13b = "MB of free hard disk space on "
+    String13c = " before it can be run.  Delete some"+
+                " files and run the Update program again."
+
+    String14  = "Setup cannot update your Windows NT files because it could not "+
+                "determine your product type.  Your registry may be corrupt."
+
+    String15  = "Setup cannot update your checked system.  The update can only "+
+                "be applied to the retail system."
+
+    Billboard1 = "Please wait..."
+    Billboard2 = "Please wait while the files to be updated are determined..."
+    Billboard3 = "Please wait while the Emergency Repair Disk is updated..."
+
+[ProgressCopyENG]
+    ProCaption   = "Windows NT Setup"
+    ProCancel    = "Cancel"
+    ProCancelMsg = "The Windows NT 3.1 files are not completely updated.  Are you sure you want "+
+                   "to cancel copying files?"
+    ProCancelCap = "Setup Message"
+    ProText1     = "Copying:"
+    ProText2     = "To:"
+
+
+[SetupDoneDlgENG]
+    Caption     = "Windows NT Setup"
+    DlgText     = "Windows NT 3.1 has been updated. If you change or add "+
+                  "any components to your system, you will need to "+
+                  "reapply the update."$(!LF)$(!LF)+
+                  "Remove disks from the floppy disk drives and "+
+                  "choose Restart Computer to run the updated system."
+
+    Reboot      = "&Restart Computer"
+    Windows     = "E&xit to Windows NT"
+    DlgType     = "Info"
+    DlgTemplate = "REBOOT"
+
+[QueryOKCancelDlgENG]
+    STF_MB_TITLE = "Setup Message"
+
+    ;no translation needed after this
+
+    DlgType      = "MessageBox"
+    STF_MB_TEXT  = $(DlgText)
+    STF_MB_TYPE  = 2
+    STF_MB_ICON  = 4
+    STF_MB_DEF   = 1

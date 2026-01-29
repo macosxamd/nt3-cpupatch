@@ -1,0 +1,2066 @@
+[GeneralConstants]
+    Radio1  = "1"
+    Radio2  = "2"
+    Radio3  = "3"
+    Radio4  = "4"
+    Radio5  = "5"
+    Radio6  = "6"
+    Radio7  = "7"
+    Radio8  = "8"
+    Radio9  = "9"
+    Chosen    = "ON"
+    NotChosen = "OFF"
+[ProcessorID]
+    ProcessorID_I386  = I386
+    ProcessorID_I486  = I486
+    ProcessorID_I586  = I586
+    ProcessorID_R4000 = R4000
+[PlatformID]
+    PlatformID_I386 = I386
+    PlatformID_Mips = Mips
+[DebugVars]
+    STF_DISPLAYDEBUGOUTPUT = 0
+[ProcessorVar]
+    STF_PROCESSOR = "" ? $(!LIBHANDLE) GetProcessor
+[LanguageVar]
+    STF_LANGUAGE   = "" ? $(!LIBHANDLE) GetLanguage
+    LanguageList   = ^(LanguageID, 1)
+[DestSizeVarsI386]
+    MinPrimaryFree = 1
+    SystemRequired = 12
+    MinSystemFree  = 15
+    MinPagingFile  = 20
+    VirtualMinimum = 20480
+    VirtualMarkup  = 12288
+    MinVolumeFree  = 35
+    MinHardDisk    = 40
+[DestSizeVarsMips]
+    MinPrimaryFree = 0
+    SystemRequired = 55
+    MinSystemFree  = 60
+    MinPagingFile  = 20
+    VirtualMinimum = 20480
+    VirtualMarkup  = 12288
+    MinVolumeFree  = 80
+    MinHardDisk    = 100
+[DriveTypeVar]
+    DriveType = "" ? $(!LIBHANDLE) GetTypeOfDrive $(DriveToExamine)
+[UiVars]
+    BuildVersion    = "6-92"
+    STF_CONTROLSET  = CurrentControlSet
+    STF_INSTALLDATE = {} ? $(!LIBHANDLE) GetSystemDate
+    STF_UPGRADE     = NO
+    STF_PRINTSERVER = ""
+    Primary         = "C:"
+    STF_NTDRIVE        = ""
+    STF_NTPATH         = ""
+    STF_WINDOWSPATH    = "" ? $(!LIBHANDLE) GetWindowsNtDir
+    STF_WINDOWSSYSPATH = "" ? $(!LIBHANDLE) GetWindowsNtSysDir
+    STF_BUSTYPE        = "" ? $(!LIBHANDLE) GetMyBusType
+    STF_UNUSEDDRIVES = {} ? $(!LIBHANDLE) GetUnusedDrives
+    OrgName            = ""
+    FullName           = ""
+    STF_USERNAME       = ""
+    STF_COMPUTERNAME   = ""
+    STF_DOMAIN         = ""
+    STF_DOMAIN_ROLE    = STANDALONE
+    STF_NCPA_FLUSH_COPYLIST = FALSE
+    SystemMemory    = "" ? $(!LIBHANDLE) GetMemorySize
+    MinWinntSystemMemory    = 8000
+    MinLanmanNTSystemMemory = 12096
+    MinSystemMemory = ""
+    DoPartial   = $(Chosen)
+    DoNetwork   = $(Chosen)
+    DoPrinter   = $(Chosen)
+    DoAppSetup  = $(Chosen)
+    STF_START_SPOOLSS = YES
+    SeedMilliseconds1 = ""
+    SeedMilliseconds2 = ""
+    Seed              = ""
+[DestPrepUiVars]
+    VolumeList      = {} ? $(!LIBHANDLE) GetHardDriveLetters
+    VolumeSizeList  = {} ? $(!LIBHANDLE) GetHardDriveTotalSpace
+    VolumeFreeList  = {} ? $(!LIBHANDLE) GetHardDriveFreeSpace
+    VolumeFSList    = {} ? $(!LIBHANDLE) GetHardDriveFileSystems
+[SeedTime]
+    SystimeStructure = {} ? $(!LIBHANDLE) GetSystemDate
+[ConfigSysAppend]
+AddOnConfig = ""
+[AutoexecBatAppend]
+AddOnBatch =  ""
+[LoadSetupLibrary]
+    LoadLibrary "x" $(!STF_CWDDIR)setupdll.dll !LIBHANDLE
+    exit
+[FreeSetupLibrary]
+    FreeLibrary $(!LIBHANDLE)
+    exit
+[Shell Commands]
+    read-syms DebugVars
+    set !DebugOutputControl = $(!STF_DISPLAYDEBUGOUTPUT)
+    StartWait
+    set-title "Windows NT Setup"
+    install   LoadSetupLibrary
+    set-subst CR = "\r"
+    set-subst LF = "\n"
+    set Exit_Code = $(!SETUP_ERROR_GENERAL)
+    read-syms GeneralConstants
+    read-syms BuiltinAccountNameVar
+    read-syms LanguageVar
+    detect    LanguageVar
+    read-syms Billboards$(!STF_LANGUAGE)
+    shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard1)
+    
+    read-syms PlatformID
+    read-syms ProductType
+    read-syms ProcessorVar
+    detect    ProcessorVar
+    ifstr(i) $(STF_PROCESSOR) == $(ProcessorID_I386)
+        ifstr(i) $(STF_PLATFORM) != $(PlatformID_I386)
+            shell "subroutn.inf" PopBillboard
+            EndWait
+            read-syms FatalError11$(STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+            StartWait
+            goto setupnotdone
+        endif
+        set STF_PRNPLATFORM = "w32x86"
+        set STF_PRNENVIRONM = "Windows NT x86"
+    else-ifstr(i) $(STF_PROCESSOR) == $(ProcessorID_I486)
+        ifstr(i) $(STF_PLATFORM) != $(PlatformID_I386)
+            shell "subroutn.inf" PopBillboard
+            EndWait
+            read-syms FatalError11$(STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+            StartWait
+            goto setupnotdone
+        endif
+        set STF_PRNPLATFORM = "w32x86"
+        set STF_PRNENVIRONM = "Windows NT x86"
+    else-ifstr(i) $(STF_PROCESSOR) == $(ProcessorID_I586)
+        ifstr(i) $(STF_PLATFORM) != $(PlatformID_I386)
+            shell "subroutn.inf" PopBillboard
+            EndWait
+            read-syms FatalError11$(STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+            StartWait
+            goto setupnotdone
+        endif
+        set STF_PRNPLATFORM = "w32x86"
+        set STF_PRNENVIRONM = "Windows NT x86"
+    else-ifstr(i) $(STF_PROCESSOR) == $(ProcessorID_R4000)
+        ifstr(i) $(STF_PLATFORM) != $(PlatformID_Mips)
+            shell "subroutn.inf" PopBillboard
+            EndWait
+            read-syms FatalError11$(STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+            StartWait
+            goto setupnotdone
+        endif
+        set STF_PRNPLATFORM = "w32mips"
+        set STF_PRNENVIRONM = "Windows NT R4000"
+    else
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        read-syms FatalError1$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        goto setupnotdone
+    endif
+checksrcdir =+
+    ifstr(i) $(STF_SRCTYPE) == "DOS"
+    else-ifstr(i) $(STF_SRCTYPE) == "ARC"
+        LibraryProcedure STATUS, $(!LIBHANDLE), ArcPathToDosPath $(STF_SRCDIR)
+        ifstr(i) $(STATUS) == ERROR
+            shell "subroutn.inf" PopBillboard
+            EndWait
+            read-syms FatalError18$(STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+            StartWait
+            goto setupnotdone
+        endif
+        set STF_SRCTYPE = "DOS"
+        set STF_SRCDIR  = $(STATUS)
+    else-ifstr(i) $(STF_SRCTYPE) == "UNC"
+        ifstr(i) $(STF_INSTALL_TYPE) == SETUPTOSHARE
+        else
+            read-syms FatalError14$(STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+            StartWait
+            goto setupnotdone
+        endif
+    else
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        read-syms FatalError18$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        goto setupnotdone
+    endif
+    ifstr(i) $(STF_INSTALL_TYPE) == SETUPTOSHARE
+         goto setuptoshare
+    else-ifstr(i) $(STF_INSTALL_TYPE) == SETUPBOOTED
+    else
+         set STF_INSTALL_TYPE = SETUPRUN
+    endif
+    read-syms UiVars
+    detect    UiVars
+    set !STF_NTPATH = $(!STF_WINDOWSSYSPATH)
+    GetDriveInPath !STF_NTDRIVE $(!STF_WINDOWSSYSPATH)
+    shell "subroutn.inf" ReadSetupHelpIds
+    SetHelpFile "setupnt.hlp" $(!MinimumID) $(!MaximumID) $(!InitialContentsID)
+memorycheck = +
+    ifstr(i) $(!STF_PRODUCT) == Winnt
+        set MinSystemMemory = $(MinWinntSystemMemory)
+    else
+        set MinSystemMemory = $(MinLanmanNTSystemMemory)
+    endif
+    ifint $(SystemMemory) < $(MinSystemMemory)
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        read-syms FatalError2$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        goto setupnotdone
+    endif
+    ifstr(i) $(STF_INSTALL_TYPE) == "SETUPRUN"
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        read-syms FatalError6$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        goto end
+    else
+        ifstr(i) $(!STF_PLATFORM) == $(!PlatformID_I386)
+            install Install-SetBootIniTimeout
+        endif
+        LibraryProcedure STATUS, $(!LIBHANDLE), InstallNetDDE
+        InitRestoreDiskLog
+        ifstr(i) $(STF_INSTALL_MODE) == "CUSTOM"
+        else-ifstr(i) $(STF_INSTALL_MODE) == "EXPRESS"
+        else
+            shell "" DoInstallMode
+            ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+                goto setupnotdone
+            endif
+            set STF_INSTALL_MODE = $($R1)
+        endif
+    endif
+finddestination =+
+    read-syms DestSizeVars$(STF_PLATFORM)
+    read-syms DestPrepUiVars
+    detect    DestPrepUiVars
+    install Install-InitializeNTTree
+    install Install-CreateNTTree
+    read-syms SeedTime
+    detect    SeedTime
+    set SeedMilliseconds1 = *($(SystimeStructure), 8)
+    shell "subroutn.inf" PopBillboard
+    shell "" DoLicense
+    ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        goto setupnotdone
+    endif
+    read-syms SeedTime
+    detect    SeedTime
+    set SeedMilliseconds2 = *($(SystimeStructure), 8)
+    set-sub Seed = $(SeedMilliseconds2) $(SeedMilliseconds1)
+    shell "" DoComputerName
+    ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        goto setupnotdone
+    else
+        set STF_COMPUTERNAME = $($R1)
+    endif
+    shell "hardware.inf"  InitialHardwareInstall
+    ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        goto setupnotdone
+    endif
+    set HardwareConfigureOptions = $($R1)
+    install Install-System-Files
+    shell "" DoOptions
+    ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        goto setupnotdone
+    endif
+    shell "partial.inf" DoProgmanComponents
+    StartWait
+    ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        goto setupnotdone
+    endif
+    set ProgmanComponents = $($R1)
+printersetup = +
+    ifstr(i) $(DoPrinter) == $(Chosen)
+        shell "prnsetup.inf" DoPrinterSetup
+        StartWait
+        ifstr(i) $($R0) == "STATUS_SUCCESSFUL"
+            set PrintersToConfigure = $($R1)
+        else-ifstr(i) $($R0) == "STATUS_USERCANCEL"
+            set PrintersToConfigure = {}
+        else-ifstr(i) $($R0) == "STATUS_USERQUIT"
+            goto setupnotdone
+        else
+            EndWait
+            read-syms NonFatalError4$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            StartWait
+            set PrintersToConfigure = {}
+        endif
+    endif
+settingaccountdomainsid = +
+    ifstr(i) $(!STF_DOS_SETUP) == "YES"
+        set SourcePath = "A:\"
+    else
+        set SourcePath = $(!STF_SRCDIR)
+    endif
+    shell "registry.inf" WinNTKeyCreate {$(!STF_WINDOWSPATH), SYSTEM, $(!FullName), $(!OrgName), $(!STF_INSTALLDATE), $(!STF_PRODUCT), $(SourcePath)}
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        EndWait
+        read-syms FatalError5$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        Debug-Output "SETUP.INF: Shelling WinNTEntryCreate failed"
+        goto setupnotdone
+    endif
+    ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        EndWait
+        read-syms FatalError5$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        Debug-Output "SETUP.INF: Creating Software Entry for WinNT Failed"
+        goto setupnotdone
+    endif
+    LibraryProcedure STATUS, $(!LIBHANDLE), SetAccountDomainSid $(Seed) $(!STF_COMPUTERNAME)
+    ifstr(i) $(STATUS) == ERROR
+        EndWait
+        read-syms FatalError9$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        goto setupnotdone
+    endif
+    LibraryProcedure STATUS, $(!LIBHANDLE), SetMyComputerName $(!STF_COMPUTERNAME)
+    ifstr(i) $(STATUS) == "ERROR"
+        EndWait
+        read-syms FatalError4$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        Debug-Output "SETUP.INF: Setting ComputerName Value Entry Failed"
+        goto setupnotdone
+    endif
+    LibraryProcedure STATUS, $(!LIBHANDLE), CreateSamEvent
+    Debug-Output "SETUP.INF: CreateSamEvent returned: "$(STATUS)
+ntlanman = +
+    ifstr(i) $(DoNetwork) == $(!Chosen)
+        EndWait
+        shell "ntlanman.inf" DoNetwork
+        StartWait
+        ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+            Debug-Output "SETUP.INF: Network inf returned: "$($R0)
+            set !DoNetwork = $(!NotChosen)
+            ifstr(i) $(!STF_PRODUCT) == "LanmanNT"
+                goto setupnotdone
+            endif
+        endif
+        set-title "Windows NT Setup"
+    endif
+signallsa = +
+    set !DebugOutputControl = $(!STF_DISPLAYDEBUGOUTPUT)
+    LibraryProcedure STATUS, $(!LIBHANDLE), SignalLsaEvent
+    Debug-Output "SETUP.INF: SignalLsaEvent returned: "$(STATUS)
+finish = +
+    read-syms ProgressCopy$(STF_LANGUAGE)
+    EndWait
+    ifstr(i) $(DoNetwork) != $(!Chosen)
+        Shell "" ControlBitmaps START
+    Endif
+    install Install-All-Files-Now
+    ifstr(i) $(DoNetwork) != $(!Chosen)
+        Shell "" ControlBitmaps STOP
+    Endif
+    StartWait
+    ifstr(i) $(STF_INSTALL_OUTCOME) == "STF_USERQUIT"
+        goto setupnotdone
+    endif
+startspooler =+
+    ifstr(i) $(!STF_START_SPOOLSS) == "YES"
+        StartDetachedProcess STATUS "" "" $(!STF_WINDOWSSYSPATH)"\spoolss.exe"
+        ifstr(i) $(STATUS) == "ERROR"
+            set SpoolerStarted = FALSE
+        else
+            set SpoolerStarted = TRUE
+        endif
+    else
+        set SpoolerStarted = TRUE
+    endif
+iniconfig =+
+    shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard3)
+    shell "hardware.inf" ConfigureHardwareOptions $(HardwareConfigureOptions)
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        read-syms FatalError3$(STF_LANGUAGE)
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        Debug-Output "SETUP.INF: Execing Configuring hardware options failed"
+        StartWait
+        goto setupnotdone
+    endif
+    ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        EndWait
+        shell "subroutn.inf" PopBillboard
+        read-syms FatalError3$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        Debug-Output "SETUP.INF: Configuring hardware options failed"
+        goto setupnotdone
+    endif
+    shell "subroutn.inf" PopBillboard
+    shell   "partial.inf" ConfigureProgman $(ProgmanComponents)
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        Debug-Output "SETUP.INF: Shelling ConfigureProgman failed"
+        goto setupnotdone
+    endif
+    shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard4)
+    Debug-Output "SETUP.INF: Setting temp variable to: "$(!STF_TEMPPATH)
+    LibraryProcedure STATUS, $(!LIBHANDLE), SetEnvVar USER "tmp"  "0" $(!REG_VT_SZ) $(!STF_TEMPPATH)
+    LibraryProcedure STATUS, $(!LIBHANDLE), SetEnvVar USER "temp" "0" $(!REG_VT_SZ) $(!STF_TEMPPATH)
+    shell "registry.inf" ModifyServicesEntry "ClipSrv"    $(!SERVICE_AUTO_START)
+    shell "registry.inf" ModifyServicesEntry "NetDDE"     $(!SERVICE_AUTO_START)
+    shell "registry.inf" ModifyServicesEntry "NetDDEdsdm" $(!SERVICE_AUTO_START)
+    Debug-Output "SETUP.INF: Setting EventLog entry to autostart."
+    shell "registry.inf" ModifyServicesEntry "Eventlog" $(!SERVICE_AUTO_START)
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        Debug-Output "SETUP.INF: Shelling ModifyServicesEntry on eventlog failed"
+        read-syms NonFatalError12$(!STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) NONFATAL $(NonFatal)
+        StartWait
+    else-ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        Debug-Output "SETUP.INF: Couldn't modify services entry for eventlog"
+        read-syms NonFatalError12$(!STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) NONFATAL $(NonFatal)
+        StartWait
+    endif
+vdmconfig =+
+    shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard5)
+    Debug-Output "SETUP.INF: Configuring the DOS Subsystem."
+    ifstr(i) $(!STF_WIN31UPGRADE) == NO
+        shell "registry.inf" AppendToSystemPath "%SystemRoot%"
+    endif
+    read-syms ConfigSysAppend
+    read-syms AutoexecBatAppend
+    LibraryProcedure STATUS,$(!LIBHANDLE),VdmFixup $(AddOnConfig) $(AddOnBatch)
+    ifstr(i) $(STATUS) == ERROR
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        read-syms NonFatalError2$(!STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) NONFATAL $(NonFatal)
+        StartWait
+    endif
+    ifstr(i) $(!STF_PLATFORM) == $(!PlatformID_Mips)
+        set wowfile = krnl286
+    else
+        set wowfile = krnl386
+    endif
+    shell "registry.inf" MakeWOWEntry $(wowfile)
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        read-syms NonFatalError13$(!STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) NONFATAL $(NonFatal)
+        StartWait
+    else-ifstr(i) $($R0) != STATUS_SUCCESSFUL
+        shell "subroutn.inf" PopBillboard
+        EndWait
+        read-syms NonFatalError13$(!STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) NONFATAL $(NonFatal)
+        StartWait
+    endif
+printerconfig=+
+    read-syms PrintMonitorName
+    LibraryProcedure STATUS,$(!LIBHANDLE),MiscSpoolerInit $(MonitorName)
+    ifstr(i) $(DoPrinter) == $(Chosen)
+        shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard7)
+        Debug-Output "SETUP.INF: Configuring printers."
+        ifstr(i) $(SpoolerStarted) == "FALSE"
+            shell "subroutn.inf" PopBillboard
+            EndWait
+            read-syms NonFatalError9$(STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            StartWait
+        else
+            shell "prnsetup.inf" DoPrinterConfigure $(PrintersToConfigure)
+            ifint $($ShellCode) != $(!SHELL_CODE_OK)
+                shell "subroutn.inf" PopBillboard
+                Debug-Output "SETUP.INF: shelling Printer Config Failed"
+                goto setupnotdone
+            else-ifstr(i) $($R0) != STATUS_SUCCESSFUL
+                shell "subroutn.inf" PopBillboard
+                EndWait
+                read-syms NonFatalError8$(STF_LANGUAGE)
+                shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "NONFATAL" $(NonFatal)
+                StartWait
+            endif
+        endif
+    endif
+setuplocalaccount=+
+    shell "subroutn.inf" PushBillboard STATUSDLG ""
+    shell "subroutn.inf" PopBillboard
+    set SetAdminPassword = YES
+    ifstr(i) $(!STF_PRODUCT) == "LanmanNT"
+        ifstr(i) $(!STF_DOMAIN_ROLE) != DC
+            set SetAdminPassword = NO
+        endif
+    endif
+    ifstr(i) $(SetAdminPassword) == YES
+        shell "" DoAdminAccountSetup
+        ifstr(i) $($R0) == STATUS_SUCCESSFUL
+            set !STF_ADMIN_PASSWORD = $($R1)
+        else
+            set !STF_ADMIN_PASSWORD = ""
+        endif
+    endif
+    set MakeUserAccount  = NO
+    ifstr(i) $(!STF_PRODUCT) == "WinNT"
+        ifstr(i) $(!STF_DOMAIN_ROLE) == STANDALONE
+            shell "" DoAccountSetup
+            ifstr(i) $($R0) == STATUS_SUCCESSFUL
+                set !STF_USERNAME = $($R1)
+                set !STF_PASSWORD = $($R2)
+                set MakeUserAccount = YES
+            else-ifstr(i) $($R0) == STATUS_USERCANCEL
+            endif
+        endif
+    endif
+    shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard8)
+    WaitOnEvent STATUS, "\SAM_SERVICE_STARTED", 0
+    Debug-Output "SETUP.INF: WaitOnEvent returned: "$(STATUS)
+    ifstr(i) $(SetAdminPassword) == YES
+        LibraryProcedure STATUS, $(!LIBHANDLE), ChangeLocalUserPassword $(AdminAccountName) "" $(!STF_ADMIN_PASSWORD)
+        Debug-Output "SETUP.INF: ChangeUserPassword for Administrator returned: "$(STATUS)
+    endif
+    ifstr(i) $(MakeUserAccount) == "YES"
+        Debug-Output "SETUP.INF: Setting up a local account."
+        LibraryProcedure STATUS, $(!LIBHANDLE), AddLocalUserAccount $(!STF_USERNAME) $(!STF_PASSWORD)
+    endif
+    Ifstr(i) $(STF_PRODUCT) == "LanmanNT"
+        Ifstr(i) $(!STF_DOMAIN_ROLE) == "DC"
+            Debug-Output "SETUP.INF: AddPdcMachineAccount for PDC of new domain..."
+            LibraryProcedure STATUS, $(!LIBHANDLE), AddPdcMachineAccount $(!STF_COMPUTERNAME)
+            Debug-Output "SETUP.INF: AddPdcMachineAccount returned: "$(STATUS)
+        Endif
+        shell "registry.inf" MakeQuotaEntries 48 24
+    Endif
+    install Install-Win-Ini-Alter
+    shell "subroutn.inf" PopBillboard
+    shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard11)
+    install Install-SetFonts
+    shell "subroutn.inf" PopBillboard
+setaclsonfiles=+
+    Debug-Output "SETUP.INF: Setting up for conversion and setacl if necessary."
+    set Fs_C     = *($(VolumeFSList), ~($(VolumeList), $(Primary)))
+    set Fs_Winnt = *($(VolumeFSList), ~($(VolumeList), $(!STF_NTDRIVE)))
+    shell "" SetAcls $(!STF_CONVERT_C) $(!STF_CONVERT_WINNT) $(Fs_C) $(Fs_Winnt)
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        Debug-Output "SETUP.INF: Shelling SetAcls failed"
+        goto setupnotdone
+    else-ifstr(i) $($R0) != STATUS_SUCCESSFUL
+        EndWait
+        read-syms FatalError10$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        goto setupnotdone
+    endif
+virtual_config = +
+    set ConfigurePagingFiles = YES
+    shell "virtual.inf" DoVirtual
+    StartWait
+    ifstr(i) $($R0) == "STATUS_SUCCESSFUL"
+        set OldPagingFiles = $($R1)
+        set NewPagingFiles = $($R2)
+    else
+        EndWait
+        read-syms NonFatalError3$(!STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+        StartWait
+        set ConfigurePagingFiles = NO
+    endif
+    Debug-Output "SETUP.INF: Setting paging files."
+    ifstr(i) $(ConfigurePagingFiles) == "YES"
+        shell "virtual.inf" ConfigureVirtual $(OldPagingFiles) $(NewPagingFiles)
+        ifint $($ShellCode) != $(!SHELL_CODE_OK)
+            Debug-Output "SETUP.INF: Shelling ConfigureVirtual failed"
+            read-syms NonFatalError6$(STF_LANGUAGE)
+            EndWait
+            shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            StartWait
+        else-ifstr(i) $($R0) != STATUS_SUCCESSFUL
+            EndWait
+            read-syms NonFatalError6$(STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            StartWait
+        endif
+    endif
+appsetup =+
+    ifstr(i) $(DoAppSetup) == $(Chosen)
+        shell "app.inf", "DoAppSearch"
+        StartWait
+    endif
+    shell "registry.inf" ResetSetupProgressValue
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        EndWait
+        read-syms FatalError13$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        goto setupnotdone
+    else-ifstr(i) $($R0) != STATUS_SUCCESSFUL
+        EndWait
+        read-syms FatalError13$(STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(STF_LANGUAGE) "FATAL" $(Fatal)
+        StartWait
+        goto setupnotdone
+    endif
+gogmt =+
+    EndWait
+    read-syms DateTime$(!STF_LANGUAGE)
+    RunProgram STATUS "" "" $(!STF_WINDOWSSYSPATH)"\control.exe" main.cpl $(Applet) setup
+    StartWait
+emergency =+
+    EndWait
+    shell "repair.inf" "CreateRepairDiskette"
+    StartWait
+cleaninfs =+
+    ForListDo {prnsetup.inf, repair.inf, virtual.inf}
+    EndForListDo
+    ifstr(i) $(!STF_DOS_SETUP) == "YES"
+        shell "subroutn.inf" PushBillboard STATUSDLG $(Billboard10)
+        LibraryProcedure STATUS, $(!LIBHANDLE), Delnode $(!STF_SRCDIR)
+        shell "subroutn.inf" PopBillboard
+    endif
+    LibraryProcedure STATUS,$(!LIBHANDLE), SaveHive $(!REG_H_USERS) ".DEFAULT" $(!STF_CONFIGPATH)"\UserDef"
+    ifstr(i) $(STATUS) != SUCCESS
+        read-syms FatalError12$(!STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) FATAL $(Fatal)
+        goto setupnotdone
+    endif
+    install Install-ScreenSaver
+setupdone =+
+    EndWait
+    set Exit_Code = $(!SETUP_ERROR_SUCCESS)
+    read-syms SetupDoneDlg$(STF_LANGUAGE)
+    ui start "SetupDone"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ui pop 1
+        goto rebootend
+    else
+        ui pop 1
+        goto end
+    endif
+setupnotdone =+
+    EndWait
+    read-syms SetupNotDoneDlg$(STF_LANGUAGE)
+    ui start "SetupNotDone"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ui pop 1
+        goto rebootend
+    else
+        ui pop 1
+        goto end
+    endif
+rebootend =+
+    set Reboot = YES
+    install   Install-Shutdown
+end =+
+    install   FreeSetupLibrary
+    exit
+upgradenotdone = +
+    EndWait
+    read-syms SetupNotDoneRestartDlg$(STF_LANGUAGE)
+    ui start "SetupNotDone"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ui pop 1
+        goto end
+    else
+        goto end
+    endif
+setuptoshare = +
+    shell "filelist.inf" SetupToShare
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        Debug-Output "SETUP.INF: shelling filelist.inf Failed"
+        goto setuptosharenotdone
+    endif
+    ifstr(i) $($R0) != STATUS_SUCCESSFUL
+        goto setuptosharenotdone
+    endif
+setuptosharedone = +
+    set Exit_Code = $(!SETUP_ERROR_SUCCESS)
+    read-syms SetupDoneRestartDlg$(STF_LANGUAGE)
+    EndWait
+    ui start "SetupDone"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ui pop 1
+        goto end
+    else
+        goto end
+    endif
+setuptosharenotdone = +
+    read-syms SetupNotDoneRestartDlg$(STF_LANGUAGE)
+    EndWait
+    ui start "SetupNotDone"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ui pop 1
+        goto end
+    else
+        goto end
+    endif
+[Install-InitializeNTTree]
+    set STF_VITAL = ""
+    set !STF_CONFIGPATH    = $(!STF_WINDOWSSYSPATH)\config
+    set !STF_DRIVERPATH    = $(!STF_WINDOWSSYSPATH)\drivers
+    set !STF_WINSPOOLPATH  = $(!STF_WINDOWSSYSPATH)\spool
+    set !STF_PRNDRIVERPATH = $(!STF_WINSPOOLPATH)\drivers\$(!STF_PRNPLATFORM)
+    set !STF_PRNPROCPATH   = $(!STF_WINSPOOLPATH)\prtprocs\$(!STF_PRNPLATFORM)
+    set !STF_TEMPPATH      = $(!STF_NTDRIVE)\temp
+    set !STF_USERPATH      = $(!STF_NTDRIVE)\users
+    set !STF_APPPATH       = $(!STF_NTDRIVE)\win32app
+    set !STF_OS2PATH       = $(!STF_WINDOWSSYSPATH)\os2
+    set !STF_OS2SYSPATH    = $(!STF_WINDOWSSYSPATH)\os2\dll
+    exit
+[Install-CreateNTTree]
+    set STF_VITAL = ""
+    CreateDir  $(!STF_WINDOWSPATH)
+    CreateDir  $(!STF_WINDOWSPATH)\system
+    CreateDir  $(!STF_WINDOWSSYSPATH)
+    CreateDir  $(!STF_TEMPPATH)
+    CreateDir  $(!STF_USERPATH)
+    CreateDir  $(!STF_USERPATH)"\default"
+    CreateDir  $(!STF_APPPATH)
+    CreateDir  $(!STF_CONFIGPATH)
+    CreateDir  $(!STF_DRIVERPATH)
+    ifstr(i) $(!STF_PLATFORM) == $(!PlatformID_I386)
+        CreateDir  $(!STF_OS2PATH)
+        CreateDir  $(!STF_OS2SYSPATH)
+    endif
+    CreateDir  $(!STF_WINSPOOLPATH)
+    CreateDir  $(!STF_WINSPOOLPATH)\drivers
+    CreateDir  $(!STF_WINSPOOLPATH)\drivers\$(!STF_PRNPLATFORM)
+    CreateDir  $(!STF_WINSPOOLPATH)\prtprocs
+    CreateDir  $(!STF_WINSPOOLPATH)\prtprocs\$(!STF_PRNPLATFORM)
+    exit
+[Install-System-Files]
+    set STF_VITAL = ""
+    AddSectionFilesToCopyList Files-$(!STF_PLATFORM)-nt                     $(!STF_SRCDIR)       $(!STF_WINDOWSPATH)
+    AddSectionFilesToCopyList Files-$(!STF_PLATFORM)-nt-system              $(!STF_SRCDIR)       $(!STF_WINDOWSSYSPATH)
+    AddSectionFilesToCopyList Files-$(!STF_PLATFORM)-nt-system-drivers	    $(!STF_SRCDIR)	 $(!STF_DRIVERPATH)
+    AddSectionFilesToCopyList Files-$(!STF_PLATFORM)-nt-system16always	    $(!STF_SRCDIR)	 $(!STF_WINDOWSPATH)\system
+    ifstr(i) $(!STF_WIN31UPGRADE) == NO
+        AddSectionFilesToCopyList Files-$(!STF_PLATFORM)-nt-compatibility  $(!STF_SRCDIR)       $(!STF_WINDOWSPATH)
+        AddSectionFilesToCopyList Files-$(!STF_PLATFORM)-nt-system16       $(!STF_SRCDIR)       $(!STF_WINDOWSPATH)\system
+    endif
+    ifstr(i) $(!STF_PLATFORM) == $(!PlatformID_I386)
+        AddSectionFilesToCopyList Files-$(!STF_PLATFORM)-nt-system-os2      $(!STF_SRCDIR)      $(!STF_OS2PATH)
+        AddSectionFilesToCopyList Files-$(!STF_PLATFORM)-nt-system-os2-dll  $(!STF_SRCDIR)      $(!STF_OS2SYSPATH)
+    endif
+    AddSectionFilesToCopyList Files-$(!STF_PLATFORM)-nt-system-spool-prtprocs-winprint +
+                              $(!STF_SRCDIR) +
+                              $(!STF_PRNPROCPATH)
+    exit
+[Install-All-Files-Now]
+    ifstr(i) $(STF_NCPA_FLUSH_COPYLIST) == FALSE
+        CopyFilesInCopyList
+    endif
+    exit
+[Install-Win-Ini-Alter]
+ReplaceIniKeyValue "Win.ini", Winlogon, DefaultUserName, $(!STF_USERNAME)
+ReplaceIniKeyValue "Win.ini", Winlogon, DebugServerCommand, "no"
+ReplaceIniKeyValue "Win.ini", DeskTop,  Wallpaper, $(!STF_PRODUCT)".bmp"
+exit
+[Install-SetFonts]
+ForListDo ^(FontList,0)
+    ReplaceIniKeyValue "Win.ini", Fonts, $($), #(FontList,$($),1)
+EndForListDo
+ForListDo ^(FontListE,0)
+    ReplaceIniKeyValue "Win.ini", Fonts, $($), #(FontListE,$($),1)
+EndForListDo
+exit
+[Install-SeeIfFileIsPresent]
+LibraryProcedure STATUS,$(!LIBHANDLE),CheckFileExistance $(FileToCheck)
+exit
+[Install-Shutdown]
+LibraryProcedure STATUS,$(!LIBHANDLE),ShutdownSystem $(Reboot)
+exit
+[Install-IsValidNetName]
+LibraryProcedure STATUS,$(!LIBHANDLE),NetNameCheck $(Name)
+exit
+[Install-SetBootIniTimeout]
+ChangeBootIniTimeout 30
+exit
+[Install-ScreenSaver]
+ReplaceIniKeyValue "Win.ini", DeskTop, ScreenSaveActive, 1
+ReplaceIniKeyValue "Win.ini", DeskTop, SCRNSAVE.EXE, $(STF_WINDOWSSYSPATH)\logon.scr
+exit
+[DoLanguage]
+    Return STATUS_FAILED
+[DoLicense]
+    set Status   = STATUS_FAILED
+license =+
+    ifstr(i) $(!OrgName) != ""
+        goto fullname
+    else
+        goto fullnameorgname
+    endif
+fullname = +
+    read-syms QueryFullNameDlg$(!STF_LANGUAGE)
+    EndWait
+    ui start "QueryName"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ifstr(i) $(EditTextOut) == ""
+            read-syms NonFatalError1$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) NONFATAL $(NonFatal)
+            goto fullname
+        else
+            ui pop 1
+            set !FullName = $(EditTextOut)
+            goto verifyfullname
+        endif
+    else-ifstr(i) $(DLGEVENT) == "EXIT"
+        shell "subroutn.inf" QueryUserQuit $(!STF_LANGUAGE)
+        ifstr(i) $($R1) == "OK"
+            set Status = STATUS_USERQUIT
+            ui pop 1
+            goto finish_license
+        else
+            goto fullname
+        endif
+    else
+        ui pop 1
+        goto finish_license
+    endif
+verifyfullname = +
+    read-syms VerifyFullNameDlg$(!STF_LANGUAGE)
+    ui start "VerifyName"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        set Status = STATUS_SUCCESSFUL
+        ui pop 1
+        goto finish_license
+    else-ifstr(i) $(DLGEVENT) == "BACK"
+        ui pop 1
+        goto fullname
+    else-ifstr(i) $(DLGEVENT) == "EXIT"
+        shell "subroutn.inf" QueryUserQuit $(!STF_LANGUAGE)
+        ifstr(i) $($R1) == "OK"
+            set Status = STATUS_USERQUIT
+            ui pop 1
+            goto finish_license
+        else
+            goto verifyfullname
+        endif
+    else
+        ui pop 1
+        goto finish_license
+    endif
+fullnameorgname = +
+   read-syms QueryFullNameOrgNameDlg$(!STF_LANGUAGE)
+   EndWait
+   ui start "QueryName"
+   ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ifstr(i) *($(EditTextOut), 1) == ""
+            read-syms NonFatalError1$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            set ReInit = NO
+            goto fullnameorgname
+        else
+            ui pop 1
+            set !FullName = *($(EditTextOut),1)
+            set !OrgName  = *($(EditTextOut),2)
+            goto verifyfullnameorgname
+        endif
+   else-ifstr(i) $(DLGEVENT) == "EXIT"
+        shell "subroutn.inf" QueryUserQuit $(!STF_LANGUAGE)
+        ifstr(i) $($R1) == "OK"
+            set Status = STATUS_USERQUIT
+            ui pop 1
+            goto finish_license
+        else
+            set ReInit = NO
+            goto fullnameorgname
+        endif
+   else
+        ui pop 1
+        goto finish_license
+   endif
+verifyfullnameorgname = +
+    read-syms VerifyFullNameOrgNameDlg$(!STF_LANGUAGE)
+    ui start "VerifyName"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        set Status = STATUS_SUCCESSFUL
+        ui pop 1
+        goto finish_license
+    else-ifstr(i) $(DLGEVENT) == "BACK"
+        ui pop 1
+        goto fullnameorgname
+    else-ifstr(i) $(DLGEVENT) == "EXIT"
+        shell "subroutn.inf" QueryUserQuit $(!STF_LANGUAGE)
+        ifstr(i) $($R1) == "OK"
+            set Status = STATUS_USERQUIT
+            ui pop 1
+            goto finish_license
+        else
+            goto verifyfullnameorgname
+        endif
+    else
+        ui pop 1
+        goto finish_license
+    endif
+finish_license = +
+    StartWait
+    Return $(Status)
+[DoComputerName]
+    set Status       = STATUS_FAILED
+    set ComputerName = ""
+computername = +
+    ifstr(i) $(!STF_PRODUCT) == Winnt
+        read-syms QueryComputerNameDlg$(!STF_LANGUAGE)
+    else
+        read-syms QueryComputerNameDlgAS$(!STF_LANGUAGE)
+    endif
+    EndWait
+    ui start "QueryComputerName"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ifstr(i) $(EditTextOut) == ""
+            read-syms NonFatalError5$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) NONFATAL $(NonFatal)
+            goto computername
+        else
+            set Name = *($(EditTextOut), 1)
+            ifstr(i) $(Name) == "."
+                read-syms NonFatalError7$(!STF_LANGUAGE)
+                shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+                goto computername
+            else-ifstr(i) $(Name) == ".."
+                read-syms NonFatalError7$(!STF_LANGUAGE)
+                shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+                goto computername
+            endif
+            install Install-IsValidNetName
+            ifstr(i) $(STATUS) == NO
+                read-syms NonFatalError7a$(!STF_LANGUAGE)
+                shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+                goto computername
+            else
+                ui pop 1
+                set ComputerName = $(EditTextOut)
+                goto verifycomputername
+            endif
+        endif
+    else-ifstr(i) $(DLGEVENT) == "EXIT"
+        shell "subroutn.inf" QueryUserQuit $(!STF_LANGUAGE)
+        ifstr(i) $($R1) == "OK"
+            set Status = STATUS_USERQUIT
+            ui pop 1
+            goto finish_docomputername
+        else
+            goto computername
+        endif
+    else
+        ui pop 1
+        goto finish_docomputername
+    endif
+verifycomputername = +
+    read-syms VerifyComputerNameDlg$(!STF_LANGUAGE)
+    ui start "VerifyComputerName"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        set Status = STATUS_SUCCESSFUL
+        ui pop 1
+        goto finish_docomputername
+    else-ifstr(i) $(DLGEVENT) == "BACK"
+        ui pop 1
+        goto computername
+    else-ifstr(i) $(DLGEVENT) == "EXIT"
+        shell "subroutn.inf" QueryUserQuit $(!STF_LANGUAGE)
+        ifstr(i) $($R1) == "OK"
+            set Status = STATUS_USERQUIT
+            ui pop 1
+            goto finish_docomputername
+        else
+            goto verifycomputername
+        endif
+    else
+        ui pop 1
+        goto finish_docomputername
+    endif
+finish_docomputername = +
+    StartWait
+    Return $(Status) $(ComputerName)
+[DoAccountSetup]
+    set Status   = STATUS_FAILED
+    set Password = ""
+    set Username = ""
+account= +
+    read-syms AccountDlg$(!STF_LANGUAGE)
+    EndWait
+    ui start "QueryAccount"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ifstr(i) *($(EditTextOut), 1) == ""
+            read-syms NonFatalError15$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            set ReInit = NO
+            goto account
+        endif
+        set Name = *($(EditTextOut), 1)
+        ifstr(i) $(Name) == $(!AdminAccountName)
+            read-syms NonFatalError16$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            set ReInit = YES
+            goto account
+        else-ifstr(i) $(Name) == $(!GuestAccountName)
+            read-syms NonFatalError16$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            set ReInit = YES
+            goto account
+        endif
+        install Install-IsValidNetName
+        ifstr(i) $(STATUS) == NO
+            read-syms NonFatalError14$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            set ReInit = NO
+            goto account
+        endif
+        set Username = *($(EditTextOut), 1)
+        ifstr *($(EditTextOut), 2) == *($(EditTextOut), 3)
+            ifstr(i) *($(EditTextOut), 2) == ""
+                read-syms Warning3$(!STF_LANGUAGE)
+                shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "WARNING" $(Warning)
+                ifstr(i) $($R0) != STATUS_SUCCESSFUL
+                else
+                    ifstr(i) $($R1) == "OK"
+                    else
+                        set ReInit = NO
+                        goto account
+                    endif
+                endif
+            endif
+            set Password = *($(EditTextOut), 2)
+            ui pop 1
+            set Status = STATUS_SUCCESSFUL
+            goto finish_account
+        else
+            read-syms NonFatalError10$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            set DefEditCtl = 1
+            set ReInit = YES
+            goto account
+        endif
+    else-ifstr(i) $(DLGEVENT) == "BACK"
+        read-syms Warning2$(!STF_LANGUAGE)
+        shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "WARNING" $(Warning)
+        ifstr(i) $($R0) != STATUS_SUCCESSFUL
+            ui pop 1
+            set Status = STATUS_USERCANCEL
+            goto finish_account
+        endif
+        ifstr(i) $($R1) == "OK"
+            set Status = STATUS_USERCANCEL
+            ui pop 1
+            goto finish_account
+        else
+            set ReInit = NO
+            goto account
+        endif
+    else
+        ui pop 1
+        goto finish_account
+    endif
+finish_account = +
+    StartWait
+    Return $(Status) $(Username) $(Password)
+[DoAdminAccountSetup]
+    set Status   = STATUS_SUCCESSFUL
+    set Password = ""
+admin_account= +
+    read-syms AdminAccountDlg$(!STF_LANGUAGE)
+    EndWait
+    ui start "QueryAdminAccount"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        ifstr *($(EditTextOut), 1) == *($(EditTextOut), 2)
+            ifstr(i) *($(EditTextOut), 1) == ""
+                read-syms Warning3$(!STF_LANGUAGE)
+                shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "WARNING" $(Warning)
+                ifstr(i) $($R0) != STATUS_SUCCESSFUL
+                else
+                    ifstr(i) $($R1) == "OK"
+                    else
+                        set ReInit = NO
+                        goto admin_account
+                    endif
+                endif
+            endif
+            set Password = *($(EditTextOut), 1)
+            ui pop 1
+            set Status = STATUS_SUCCESSFUL
+            goto finish_admin_account
+        else
+            read-syms NonFatalError10$(!STF_LANGUAGE)
+            shell "subroutn.inf" SetupMessage $(!STF_LANGUAGE) "NONFATAL" $(NonFatal)
+            set DefEditCtl = 0
+            set ReInit = YES
+            goto admin_account
+        endif
+    else
+        ui pop 1
+        goto finish_admin_account
+    endif
+finish_admin_account = +
+    StartWait
+    Return $(Status) $(Password)
+[DoInstallMode]
+    set Status = STATUS_FAILED
+    read-syms InstallModeConstants
+    set InstallMode     = "CUSTOM"
+    set InteractDefault = $(MaxInteract)
+queryinstallmode = +
+    read-syms InstallModeDlg$(!STF_LANGUAGE)
+    EndWait
+    ui start "InstallMode"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        set Status = STATUS_SUCCESSFUL
+        ui pop 1
+        ifstr(i) $(ButtonChecked) == $(MinInteract)
+            set InstallMode = EXPRESS
+        else
+            set InstallMode = CUSTOM
+        endif
+    else-ifstr(i) $(DLGEVENT) == "EXIT"
+        shell "subroutn.inf" QueryUserQuit $(!STF_LANGUAGE)
+        ifstr(i) $($R1) == "OK"
+            set Status = STATUS_USERQUIT
+            ui pop 1
+        else
+            goto queryinstallmode
+        endif
+    else
+        ui pop 1
+    endif
+    StartWait
+    Return $(Status) $(InstallMode)
+[InstallModeConstants]
+    MinInteract        = "1"
+    MaxInteract        = "2"
+[DoOptions]
+    set Status = STATUS_FAILED
+options = +
+    ifstr(i) $(!STF_PRODUCT) == Winnt
+        set OptionsGreyed = {}
+    else
+        set OptionsGreyed = {3}
+    endif
+    ifstr(i) $(!STF_WIN31UPGRADE) == "YES"
+        set !DoAppSetup = $(!NotChosen)
+        set OptionsGreyed = >($(OptionsGreyed), 4)
+    endif
+    ifstr(i) $(!STF_INSTALL_MODE) == EXPRESS
+        set Status = STATUS_SUCCESSFUL
+        goto finish_options
+    endif
+    read-syms OptionsDlg$(!STF_LANGUAGE)
+    EndWait
+    ui start "Options"
+    ifstr(i) $(DLGEVENT) == "CONTINUE"
+        set !DoPartial   = *($(CheckItemsOut), "1")
+        set !DoPrinter   = *($(CheckItemsOut), "2")
+        set !DoNetwork   = *($(CheckItemsOut), "3")
+        set !DoAppSetup  = *($(CheckItemsOut), "4")
+        ui pop 1
+        set Status = STATUS_SUCCESSFUL
+        goto finish_options
+    else-ifstr(i) $(DLGEVENT) == "EXIT"
+        shell "subroutn.inf" QueryUserQuit $(!STF_LANGUAGE)
+        ifstr(i) $($R1) == "OK"
+            set Status = STATUS_USERQUIT
+            ui pop 1
+            goto finish_options
+        else
+            goto options
+        endif
+    else
+        ui pop 1
+        goto finish_options
+    endif
+finish_options = +
+    StartWait
+    Return $(Status)
+[SetAcls]
+    set Status = STATUS_FAILED
+    set Convert_C     = $($0)
+    set Convert_Winnt = $($1)
+    set Fs_C          = $($2)
+    set Fs_Winnt      = $($3)
+    set AutoLines = {}
+    set SetAcl_C = NO
+    set SetAcl_Winnt = NO
+    ifstr(i) $(Convert_C) == YES
+        set AutoLines   = >($(AutoLines), "autoconv \DosDevices\C: /fs:NTFS")
+        set SetAcl_C = YES
+    endif
+    ifstr(i) $(Convert_Winnt) == YES
+        set AutoLines   = >($(AutoLines), "autoconv \DosDevices\"$(!STF_NTDRIVE)" /fs:NTFS")
+        set SetAcl_Winnt = YES
+    endif
+    ifstr(i) $(SetAcl_C) == NO
+        ifstr(i) $(Fs_C) == NTFS
+            set SetAcl_C =  YES
+        endif
+    endif
+    ifstr(i) $(SetAcl_Winnt) == NO
+        ifstr(i) $(Fs_Winnt) == NTFS
+            set SetAcl_Winnt =  YES
+        endif
+    endif
+    ifstr(i) $(SetAcl_C) == YES
+        ifstr(i) $(SetAcl_Winnt) == YES
+            set AutoLines = >($(AutoLines), "setacl /a \DosDevices\"$(!STF_WINDOWSSYSPATH)"\winperms.txt \DosDevices\"$(!STF_NTDRIVE))
+        else
+            set AutoLines = >($(AutoLines), "setacl /c \DosDevices\"$(!STF_WINDOWSSYSPATH)"\winperms.txt")
+        endif
+    else-ifstr(i) $(SetAcl_Winnt) == YES
+        set AutoLines = >($(AutoLines), "setacl /w \DosDevices\"$(!STF_WINDOWSSYSPATH)"\winperms.txt \DosDevices\"$(!STF_NTDRIVE))
+    endif
+    shell "registry.inf" AppendToBootExecute $(AutoLines)
+    ifint $($ShellCode) != $(!SHELL_CODE_OK)
+        Debug-Output "SETUP.INF: Shelling AppendToBootExecute failed"
+        goto finish_setacls
+    endif
+    ifstr(i) $($R0) != "STATUS_SUCCESSFUL"
+        Debug-Output "SETUP.INF: AppendToBootExecute failed"
+        goto finish_setacls
+    endif
+    set Status = STATUS_SUCCESSFUL
+finish_setacls = +
+    Return $(Status)
+[ControlBitmaps]
+    Ifstr(i) $($0) == START
+        Ifstr(i) $(!STF_PRODUCT) == "LANMANNT"
+            Set BmpList = {305,303,311,309,301,308}
+        Else
+            Set BmpList = {305,302,306,310,304,307}
+        Endif
+        BmpShow 1 5 15 $(BmpList)
+        Set !STF_DLG_PRO_CTR_X = 70
+        Set !STF_DLG_PRO_CTR_Y = 75
+    Else
+        BmpHide
+        Set !STF_DLG_PRO_CTR_X = 50
+        Set !STF_DLG_PRO_CTR_Y = 50
+    Endif
+    return
+[Source Media Descriptions]
+    1  = "Windows NT-Diskette für CD-Installation"  , TAGFILE = disk1
+    2  = "Windows NT-CD"  , TAGFILE = disk2
+[ProductType]
+STF_PRODUCT  = Winnt
+STF_PLATFORM = I386
+[Files-I386-nt-compatibility]
+2,NOTEPAD.EXE , SIZE=58880 , NODELETESOURCE
+2,TASKMAN.EXE , SIZE=28160 , NODELETESOURCE
+2,WINHELP.EXE , SIZE=258560
+2,SYSTEM.INI , SIZE=512
+2,WIN.INI , SIZE=512
+2,WINFILE.INI , SIZE=512
+2,_DEFAULT.PIF , SIZE=1024
+[Files-I386-nt-system-drivers]
+2,STREAMS.SYS , SIZE=149504 , NODELETESOURCE
+2,AFD.SYS , SIZE=41984
+2,CDAUDIO.SYS , SIZE=35328
+2,DISKPERF.SYS , SIZE=11264
+2,HPSCAN16.SYS , SIZE=1024
+2,MUP.SYS , SIZE=24064
+2,NDIS.SYS , SIZE=50688
+2,PARALLEL.SYS , SIZE=27136
+2,SCSIPRNT.SYS , SIZE=19968
+2,SCSISCAN.SYS , SIZE=19456
+2,TDI.SYS , SIZE=14336
+2,VGA_ALT.SYS , SIZE=28672
+[Files-I386-nt-system-os2-dll]
+2,DOSCALLS.DLL , SIZE=12800
+[Files-I386-nt-system-os2]
+2,OSO009 , SIZE=108544 , RENAME=oso001.009 , NODELETESOURCE
+[Files-I386-nt-system-spool-prtprocs-winprint]
+2,WINPRINT.DLL , SIZE=12288
+[Files-I386-nt-system16]
+2,COMMDLG.DLL , SIZE=23040 , NODELETESOURCE
+2,MMSYSTEM.DLL , SIZE=20992 , NODELETESOURCE
+2,OLECLI.DLL , SIZE=83456 , NODELETESOURCE
+2,OLESVR.DLL , SIZE=24064 , NODELETESOURCE
+2,SHELL.DLL , SIZE=5120 , NODELETESOURCE
+2,VER.DLL , SIZE=9216 , NODELETESOURCE
+2,SETUP16.INF , SIZE=59392 , RENAME=setup.inf
+2,MMTASK.TSK , SIZE=1536 , NODELETESOURCE
+[Files-I386-nt-system16always]
+2,APP850.FON , SIZE=36864
+2,CGA40850.FON , SIZE=6656
+2,CGA40WOA.FON , SIZE=6656
+2,CGA80850.FON , SIZE=4608
+2,CGA80WOA.FON , SIZE=4608
+2,DOSAPP.FON , SIZE=36864
+2,EGA40850.FON , SIZE=8704
+2,EGA40WOA.FON , SIZE=8704
+2,EGA80850.FON , SIZE=5632
+2,EGA80WOA.FON , SIZE=5632
+2,MODERN.FON , SIZE=8704
+2,ROMAN.FON , SIZE=13312
+2,SCRIPT.FON , SIZE=12288
+2,SMALLE.FON , SIZE=26112
+2,SMALLF.FON , SIZE=21504
+2,SYMBOLE.FON , SIZE=56832
+2,SYMBOLF.FON , SIZE=81408
+2,VGA860.FON , SIZE=5632
+2,VGA861.FON , SIZE=5632
+2,VGA863.FON , SIZE=5632
+2,VGA865.FON , SIZE=5632
+2,ARIAL.FOT , SIZE=1536
+2,ARIALBD.FOT , SIZE=1536
+2,ARIALBI.FOT , SIZE=1536
+2,ARIALI.FOT , SIZE=1536
+2,COUR.FOT , SIZE=1536
+2,COURBD.FOT , SIZE=1536
+2,COURBI.FOT , SIZE=1536
+2,COURI.FOT , SIZE=1536
+2,SYMBOL.FOT , SIZE=1536
+2,TIMES.FOT , SIZE=1536
+2,TIMESBD.FOT , SIZE=1536
+2,TIMESBI.FOT , SIZE=1536
+2,TIMESI.FOT , SIZE=1536
+2,WINGDING.FOT , SIZE=1536
+2,ARIAL.TTF , SIZE=73216
+2,ARIALBD.TTF , SIZE=73216
+2,ARIALBI.TTF , SIZE=79872
+2,ARIALI.TTF , SIZE=69120
+2,COUR.TTF , SIZE=80896
+2,COURBD.TTF , SIZE=87552
+2,COURBI.TTF , SIZE=94208
+2,COURI.TTF , SIZE=89600
+2,L_10646.TTF , SIZE=263680
+2,SYMBOL.TTF , SIZE=64512
+2,TIMES.TTF , SIZE=92160
+2,TIMESBD.TTF , SIZE=88576
+2,TIMESBI.TTF , SIZE=85504
+2,TIMESI.TTF , SIZE=87040
+2,WINGDING.TTF , SIZE=71168
+[Files-I386-nt-system]
+2,APPSTART.ANI , SIZE=8192
+2,BANANA.ANI , SIZE=12288
+2,BARBER.ANI , SIZE=8704
+2,COIN.ANI , SIZE=7168
+2,COUNTER.ANI , SIZE=7168
+2,DRUM.ANI , SIZE=3584
+2,FILLITUP.ANI , SIZE=15360
+2,HAND.ANI , SIZE=3584
+2,HORSE.ANI , SIZE=18944
+2,HOURGLAS.ANI , SIZE=12288
+2,METRONOM.ANI , SIZE=9728
+2,PIANO.ANI , SIZE=5120
+2,RAINBOW.ANI , SIZE=10240
+2,RAINDROP.ANI , SIZE=5120
+2,SIZENESW.ANI , SIZE=1024
+2,SIZENS.ANI , SIZE=1024
+2,SIZENWSE.ANI , SIZE=1024
+2,SIZEWE.ANI , SIZE=1024
+2,STOPWTCH.ANI , SIZE=7168
+2,VANISHER.ANI , SIZE=2048
+2,WAGTAIL.ANI , SIZE=2560
+2,REMLINE.BAS , SIZE=12800
+2,MIDIMAP.CFG , SIZE=38400
+2,CHCP.COM , SIZE=19456
+2,COMMAND.COM , SIZE=52224
+2,DISKCOMP.COM , SIZE=31744
+2,DISKCOPY.COM , SIZE=26624
+2,EDIT.COM , SIZE=512
+2,FORMAT.COM , SIZE=40448
+2,GRAFTABL.COM , SIZE=26112
+2,GRAPHICS.COM , SIZE=19968
+2,KB16.COM , SIZE=14848
+2,KEYB.COM , SIZE=31232
+2,LOADFIX.COM , SIZE=1536
+2,MODE.COM , SIZE=40960
+2,MORE.COM , SIZE=34816
+2,TREE.COM , SIZE=26112
+2,WIN.COM , SIZE=15360
+2,EGA.CPI , SIZE=58880
+2,CURSORS.CPL , SIZE=23040
+2,MAIN.CPL , SIZE=219136
+2,MULTIMED.CPL , SIZE=10752
+2,SRVMGR.CPL , SIZE=253952
+2,UPS.CPL , SIZE=33792
+2,COMMDLG.DLL , SIZE=23040 , NODELETESOURCE
+2,DLCAPI.DLL , SIZE=17408 , NODELETESOURCE
+2,MCIAVI32.DLL , SIZE=83968 , NODELETESOURCE
+2,MMSYSTEM.DLL , SIZE=20992 , NODELETESOURCE
+2,MSVFW32.DLL , SIZE=52736 , NODELETESOURCE
+2,MSVIDC32.DLL , SIZE=38400 , NODELETESOURCE
+2,OLECLI.DLL , SIZE=83456 , NODELETESOURCE
+2,OLESVR.DLL , SIZE=24064 , NODELETESOURCE
+2,SHELL.DLL , SIZE=5120 , NODELETESOURCE
+2,VER.DLL , SIZE=9216 , NODELETESOURCE
+2,AB32.DLL , SIZE=134144
+2,ACLEDIT.DLL , SIZE=225280
+2,ALRSVC.DLL , SIZE=34304
+2,CARDS.DLL , SIZE=158208
+2,CLB.DLL , SIZE=17920
+2,CUFAT.DLL , SIZE=31744
+2,CUHPFS.DLL , SIZE=35840
+2,DDEML.DLL , SIZE=36864
+2,DEMIL32.DLL , SIZE=62976
+2,DRIVERS.DLL , SIZE=50176
+2,FMIFS.DLL , SIZE=15872
+2,FRAME32.DLL , SIZE=287744
+2,HPSCAN32.DLL , SIZE=9728
+2,HTUI.DLL , SIZE=51712
+2,IFSUTIL.DLL , SIZE=70656
+2,IMAGEHLP.DLL , SIZE=52736
+2,IMPEXP32.DLL , SIZE=90624
+2,IOLOGMSG.DLL , SIZE=11264
+2,LOCALMON.DLL , SIZE=28160
+2,LOCALSPL.DLL , SIZE=95744
+2,LZEXPAND.DLL , SIZE=10240
+2,MAILM32.DLL , SIZE=70144
+2,MAPI.DLL , SIZE=19968
+2,MAPI32.DLL , SIZE=23552
+2,MAPISRV.EXE , SIZE=28672
+2,MAPIXX.DLL , SIZE=73216
+2,MCICDA.DLL , SIZE=24576
+2,MCIOLE16.DLL , SIZE=7168
+2,MCIOLE32.DLL , SIZE=16896
+2,MCISEQ.DLL , SIZE=35328
+2,MCIWAVE.DLL , SIZE=33792
+2,MIDIMAP.DLL , SIZE=88576
+2,MMDRV.DLL , SIZE=20992
+2,MORICONS.DLL , SIZE=140288
+2,MPRUI.DLL , SIZE=114688
+2,MSAUDITE.DLL , SIZE=28672
+2,MSOBJS.DLL , SIZE=17408
+2,MSPELL32.DLL , SIZE=106496
+2,MSPRIVS.DLL , SIZE=29184
+2,MSSCHD32.DLL , SIZE=282112
+2,MSSFS32.DLL , SIZE=340992
+2,MVAPI32.DLL , SIZE=10240
+2,MVFS32.DLL , SIZE=73728
+2,NDDEAPI.DLL , SIZE=38400
+2,NETAPI.DLL , SIZE=119808
+2,NETBIOS.DLL , SIZE=30208
+2,NETEVENT.DLL , SIZE=49152
+2,NETH.DLL , SIZE=239616
+2,NTLANMAN.DLL , SIZE=178176
+2,OLECLI32.DLL , SIZE=93696
+2,OLESVR32.DLL , SIZE=43008
+2,PABNSP32.DLL , SIZE=59392
+2,PERFCTRS.DLL , SIZE=56832
+2,PMSPL.DLL , SIZE=46592
+2,PSXDLL.DLL , SIZE=90624
+2,RPCLTC3.DLL , SIZE=12800
+2,RPCLTC5.DLL , SIZE=14848
+2,RPCLTC6.DLL , SIZE=12800
+2,RPCLTS3.DLL , SIZE=14848
+2,RPCLTS5.DLL , SIZE=15872
+2,RPCLTS6.DLL , SIZE=14848
+2,RPCNS4.DLL , SIZE=48640
+2,SCHMSG32.DLL , SIZE=93696
+2,SENDFL32.DLL , SIZE=15360
+2,SOUND.DLL , SIZE=19456
+2,SPOOLSS.DLL , SIZE=23552
+2,SRVSVC.DLL , SIZE=177152
+2,STORE32.DLL , SIZE=312320
+2,TOOLHELP.DLL , SIZE=13824
+2,TRNSCH32.DLL , SIZE=26112
+2,UFAT.DLL , SIZE=88064
+2,UHPFS.DLL , SIZE=156672
+2,ULIB.DLL , SIZE=221184
+2,UNTFS.DLL , SIZE=299520
+2,UREG.DLL , SIZE=29184
+2,VCDEX.DLL , SIZE=14336
+2,VDMDBG.DLL , SIZE=22016
+2,VDMREDIR.DLL , SIZE=76800
+2,VFORM32.DLL , SIZE=212480
+2,WGPOMG32.DLL , SIZE=114688
+2,WIN32SPL.DLL , SIZE=114176
+2,WIN87EM.DLL , SIZE=13312
+2,WINMSD.DLL , SIZE=26112
+2,WOW32.DLL , SIZE=345600
+2,XACTSRV.DLL , SIZE=106496
+2,NT.DOC , SIZE=5120
+2,COMM.DRV , SIZE=10240
+2,KEYBOARD.DRV , SIZE=1536
+2,LANMAN.DRV , SIZE=225280
+2,MOUSE.DRV , SIZE=3072
+2,MSACM32.DRV , SIZE=33280
+2,SOUND.DRV , SIZE=1536
+2,SYSTEM.DRV , SIZE=3072
+2,VGA.DRV , SIZE=4608
+2,WFWNET.DRV , SIZE=12800
+2,LMSVCS.EXE , SIZE=22016 , NODELETESOURCE
+2,TASKMAN.EXE , SIZE=28160 , NODELETESOURCE
+2,ACLCONV.EXE , SIZE=54272
+2,APPEND.EXE , SIZE=11264
+2,AT.EXE , SIZE=59904
+2,ATSVC.EXE , SIZE=29184
+2,ATTRIB.EXE , SIZE=39424
+2,AUTOCONV.EXE , SIZE=679424
+2,AUTOSETP.EXE , SIZE=13824
+2,BACKUP.EXE , SIZE=36864
+2,BOOTOK.EXE , SIZE=23552
+2,BOOTVRFY.EXE , SIZE=15360
+2,CHKDSK.EXE , SIZE=23552
+2,CLIPBRD.EXE , SIZE=112640
+2,CLIPSRV.EXE , SIZE=51200
+2,CMD.EXE , SIZE=161280
+2,COMP.EXE , SIZE=38400
+2,CONTROL.EXE , SIZE=36352
+2,CONVERT.EXE , SIZE=28160
+2,DDESHARE.EXE , SIZE=39424
+2,DEBUG.EXE , SIZE=21504
+2,DISKPERF.EXE , SIZE=28672
+2,DOSKEY.EXE , SIZE=42496
+2,DOSX.EXE , SIZE=40448
+2,DRWATSON.EXE , SIZE=26624
+2,DRWTSN32.EXE , SIZE=76288
+2,EDLIN.EXE , SIZE=13312
+2,EVENTLOG.EXE , SIZE=77312
+2,EVENTVWR.EXE , SIZE=206336
+2,EXE2BIN.EXE , SIZE=8704
+2,EXPAND.EXE , SIZE=39424
+2,FASTOPEN.EXE , SIZE=1024
+2,FC.EXE , SIZE=41472
+2,FIND.EXE , SIZE=26112
+2,FINDSTR.EXE , SIZE=53248
+2,FORCEDOS.EXE , SIZE=20992
+2,GDI.EXE , SIZE=22528
+2,HELP.EXE , SIZE=27136
+2,INTRO.EXE , SIZE=34304
+2,KRNL386.EXE , SIZE=80896
+2,LABEL.EXE , SIZE=27136
+2,MAILSP32.EXE , SIZE=74240
+2,MEM.EXE , SIZE=39936
+2,MPNOTIFY.EXE , SIZE=28160
+2,MSCDEXNT.EXE , SIZE=1024
+2,MSGSVC.EXE , SIZE=57344
+2,MSMAIL32.EXE , SIZE=403968
+2,MSRMND32.EXE , SIZE=47616
+2,MUSRMGR.EXE , SIZE=435200
+2,NDDEAGNT.EXE , SIZE=14848
+2,NDDEAPIR.EXE , SIZE=9728
+2,NET.EXE , SIZE=203776
+2,NETDDE.EXE , SIZE=155136
+2,NLSFUNC.EXE , SIZE=7168
+2,NTBACKUP.EXE , SIZE=765952
+2,NTVDM.EXE , SIZE=552448
+2,OS2.EXE , SIZE=520704
+2,OS2SRV.EXE , SIZE=146944
+2,OS2SS.EXE , SIZE=11264
+2,PAX.EXE , SIZE=73216
+2,PERFMON.EXE , SIZE=194048
+2,PIFEDIT.EXE , SIZE=94720
+2,PORTUAS.EXE , SIZE=44544
+2,POSIX.EXE , SIZE=48128
+2,PRINT.EXE , SIZE=23552
+2,PRINTMAN.EXE , SIZE=162816
+2,PSXSS.EXE , SIZE=100864
+2,QBASIC.EXE , SIZE=256000
+2,RECOVER.EXE , SIZE=23552
+2,REDIR.EXE , SIZE=3584
+2,REGEDT32.EXE , SIZE=182784
+2,REPLACE.EXE , SIZE=28672
+2,RESTORE.EXE , SIZE=58880
+2,SCHDPL32.EXE , SIZE=648192
+2,SETACL.EXE , SIZE=19456
+2,SETVER.EXE , SIZE=12288
+2,SHARE.EXE , SIZE=1024
+2,SORT.EXE , SIZE=23552
+2,SPOOLSS.EXE , SIZE=73216
+2,SUBST.EXE , SIZE=27136
+2,SYSEDIT.EXE , SIZE=19456
+2,UPS.EXE , SIZE=19456
+2,USER.EXE , SIZE=44032
+2,USERINIT.EXE , SIZE=30720
+2,WINDISK.EXE , SIZE=130048
+2,WINFILE.EXE , SIZE=258048
+2,WINMSD.EXE , SIZE=75776
+2,WINMSDP.EXE , SIZE=47104
+2,WINSPOOL.EXE , SIZE=3072
+2,WINVER.EXE , SIZE=20992
+2,WOWDEB.EXE , SIZE=5120
+2,WOWEXEC.EXE , SIZE=15360
+2,XCOPY.EXE , SIZE=41472
+2,NT.FNT , SIZE=11264
+2,NT2.FNT , SIZE=15872
+2,DOSHELP.HLP , SIZE=5120
+2,DRWTSN32.HLP , SIZE=82432
+2,EDIT.HLP , SIZE=22016
+2,FTPSMX.HLP , SIZE=13824
+2,HALFTONE.HLP , SIZE=30720
+2,MUSRMGR.HLP , SIZE=80384
+2,NET.HLP , SIZE=64000
+2,NETWORK.HLP , SIZE=23552
+2,NTCMDS.HLP , SIZE=953856
+2,SNDVOL32.HLP , SIZE=35328
+2,WINDISK.HLP , SIZE=97792
+2,WINHELP.HLP , SIZE=36864
+2,INTRO.ICO , SIZE=1024
+2,CALC.IND , SIZE=309248
+2,MUSRMGR.IND , SIZE=88064
+2,NTCMDS.IND , SIZE=575488
+2,MMDRIVER.INF , SIZE=2048
+2,NTLMINST.INF , SIZE=52736
+2,MSP32_GE.LEX , SIZE=375296
+2,PASSPORT.MID , SIZE=40448
+2,AUTOEXEC.NT , SIZE=512 , RENAME=autoexec.tmp , NOLOG
+2,CONFIG.NT , SIZE=1536 , RENAME=config.tmp , NOLOG
+2,GRAPHICS.PRO , SIZE=21504
+2,CMOS.RAM , SIZE=512
+2,BIOS1.ROM , SIZE=25088
+2,BIOS2.ROM , SIZE=8192
+2,V7VGA.ROM , SIZE=18944
+2,BLACK16.SCR , SIZE=6144
+2,PCL.SEP , SIZE=512
+2,PSCRIPT.SEP , SIZE=512
+2,PSLANMAN.SEP , SIZE=3072
+2,SYSPRINT.SEP , SIZE=3584
+2,CLIP01.SEQ , SIZE=15872
+2,CLIP02.SEQ , SIZE=29696
+2,CLIP03.SEQ , SIZE=25600
+2,COMM01.SEQ , SIZE=20480
+2,COMM02.SEQ , SIZE=24576
+2,CONN01.SEQ , SIZE=16896
+2,CONN02.SEQ , SIZE=28672
+2,CREAT01.SEQ , SIZE=19968
+2,CREAT02.SEQ , SIZE=22016
+2,INTRO1.SEQ , SIZE=28672
+2,INTRO2.SEQ , SIZE=21504
+2,LOG01.SEQ , SIZE=18944
+2,NTMENU.SEQ , SIZE=22528
+2,PANEL.SEQ , SIZE=10752
+2,PAUSE.SEQ , SIZE=4096
+2,PRINT01.SEQ , SIZE=29696
+2,REVIEW.SEQ , SIZE=2560
+2,SETT01.SEQ , SIZE=25088
+2,SETT02.SEQ , SIZE=27648
+2,SETT03.SEQ , SIZE=23040
+2,SETT04.SEQ , SIZE=16384
+2,SHARE01.SEQ , SIZE=16384
+2,SHARE02.SEQ , SIZE=18944
+2,ANSI.SYS , SIZE=9216
+2,COUNTRY.SYS , SIZE=17408
+2,HIMEM.SYS , SIZE=6144
+2,KEYBOARD.SYS , SIZE=21504
+2,NTDOS.SYS , SIZE=27648
+2,NTIO.SYS , SIZE=35328
+2,WDL.TRM , SIZE=4096
+2,MMTASK.TSK , SIZE=1536 , NODELETESOURCE
+2,WINPERMS.TXT , SIZE=46080
+2,README.WRI , SIZE=671744
+[Files-I386-nt]
+2,WINNT.BMP , SIZE=76800
+2,WRITE.EXE , SIZE=247296 , NODELETESOURCE
+2,REGEDIT.EXE , SIZE=33280
+2,REGEDIT.HLP , SIZE=23040
+2,RINGIN.WAV , SIZE=10240
+2,RINGOUT.WAV , SIZE=5632
+[LanguageID]
+   ENG
+[LanguageTextENG]
+   "Deutsch (Deutschland)"
+[BuiltinAccountNameVar]
+AdminAccountName = "Administrator"
+GuestAccountName = "Gast"
+[PrintMonitorName]
+MonitorName = "Lokaler Anschluß"
+[ProgressCopyENG]
+    ProCaption   = "Windows NT-Setup"
+    ProCancel    = "Abbrechen"
+    ProCancelMsg = "Windows NT ist nicht korrekt installiert. Sind Sie sicher, daß Sie "+
+                   "das Kopieren der Dateien abbrechen möchten?"
+    ProCancelCap = "Setup-Meldung"
+    ProText1     = "Kopiert:"
+    ProText2     = "Nach:"
+[LanguageDlgENG]
+    Caption      = "Sprachauswahl"
+    DlgText      = "Setup wird in einer der folgenden Sprachen erscheinen. Wählen "+
+                   "Sie Ihre bevorzugte Sprache."
+    ListHeader   = ""
+    Continue     = "Fortsetzen"
+    Help         = "&Hilfe"
+    Exit         = "&Beenden"
+    DlgType      = "List"
+    DlgTemplate  = "Language"
+    ListItemsIn  = ^(LanguageText$(!STF_LANGUAGE), 1)
+    ListItemsOut = *($(ListItemsIn), ~($(LanguageList), $(!STF_LANGUAGE)))
+    HelpContext  = ""
+[QueryFullNameDlgENG]
+    Caption     = "Windows NT-Setup"
+    DlgText     = "Geben Sie Ihren vollständigen Namen in das Feld ein."$(!LF)$(!LF)+
+                  "Wählen Sie dann 'Fortsetzen', oder drücken Sie die EINGABETASTE."$(!LF)$(!LF)+
+                  "Die eingegebenen Informationen werden vom Setup "+
+                  "und für nachfolgende Installationen von Windows NT verwendet."
+    Edit1Label  = "&Name:"
+    Continue    = "Fortsetzen"
+    Help        = "&Hilfe"
+    Exit        = "&Beenden"
+    DlgType     = "Edit"
+    DlgTemplate = "QUERY_FULLNAME"
+    HelpContext = $(!IDH_DB_FULLNAMEQ_INS)
+    EditTextLim = 50
+    EditTextIn  = $(!FullName)
+    EditFocus   = "ALL"
+[QueryFullNameOrgNameDlgENG]
+    Caption     = "Windows NT-Setup"
+    DlgText     = "Geben Sie Ihren vollständigen Namen in das Feld ein. "+
+                  "Sie können auch den Namen Ihrer Firma eingeben, wenn "+
+                  "Windows NT für geschäftliche Zwecke genutzt wird. "$(!LF)$(!LF)+
+                  "Wählen Sie dann 'Fortsetzen', oder drücken Sie die EINGABETASTE. "$(!LF)$(!LF)+
+                  "Die eingegebenen Informationen werden vom Setup "+
+                  "und für nachfolgende Installationen von Windows NT verwendet."
+    Edit1Label  = "&Name:"
+    Edit2Label  = "&Firma:"
+    Continue    = "Fortsetzen"
+    Help        = "&Hilfe"
+    Exit        = "&Beenden"
+    DlgType     = "MultiEdit"
+    DlgTemplate = "QUERY_FULLNAME_ORGNAME"
+    HelpContext = $(!IDH_DB_ORGNAMEQ_INS)
+    EditTextLim = {50, 50}
+    EditTextIn  = {$(!FullName), $(!OrgName)}
+[VerifyFullNameDlgENG]
+    Caption      = "Windows NT-Setup"
+    DlgText      = "Prüfen Sie, ob Ihr Name korrekt eingegeben wurde."$(!LF)$(!LF)+
+                   "Wählen Sie 'Ändern', wenn Sie ihn ändern möchten. "+
+                   "Wählen Sie andernfalls 'Fortsetzen'."
+    Static1Label = "Name:"
+    Continue     = "Fortsetzen"
+    Cancel       = "Ä&ndern"
+    Help         = "&Hilfe"
+    Exit         = "&Beenden"
+    Static1Text  = $(!FullName)
+    DlgType      = "Info"
+    DlgTemplate  = "VERIFY_FULLNAME"
+    HelpContext  = $(!IDH_DB_FULLNAMEV_INS)
+[VerifyFullNameOrgNameDlgENG]
+    Caption      = "Windows NT-Setup"
+    DlgText      = "Überprüfen Sie, ob Ihre eingegebenen Informationen korrekt sind."$(!LF)$(!LF)+
+                   "Wählen Sie 'Ändern', wenn Sie den Namen oder die Firma ändern möchten. "+
+                   "Wählen Sie andernfalls 'Fortsetzen'."
+    Static1Label = "Name:"
+    Static1Text  = $(!FullName)
+    Static2Label = "Firma:"
+    Static2Text  = $(!OrgName)
+    Continue     = "Fortsetzen"
+    Cancel       = "Ä&ndern"
+    Help         = "&Hilfe"
+    Exit         = "&Beenden"
+    DlgType      = "Info"
+    DlgTemplate  = "VERIFY_FULLNAME_ORGNAME"
+    HelpContext  = $(!IDH_DB_ORGNAMEV_INS)
+[QueryComputerNameDlgENG]
+    Caption     = "Windows NT-Setup"
+    DlgText     = "Windows NT benötigt einen Computernamen, um Ihren Computer "+
+                  "zu identifizieren. Geben Sie einen eindeutigen, maximal 15 Zeichen "+
+                  "langen Namen ein. "$(!LF)$(!LF)+
+                  "Wenn Sie sich an einer Windows NT Advanced Server-Domäne beteiligen möchten, "+
+                  "sollten Sie den Namen von Ihrem Netzwerkadministrator erhalten."
+    Edit1Label  = "&Computername:"
+    Continue    = "Fortsetzen"
+    Help        = "&Hilfe"
+    Exit        = "&Beenden"
+    DlgType     = "Edit"
+    DlgTemplate = "QUERY_COMPUTER_NAME"
+    HelpContext = $(!IDH_DB_COMPUTERNAMEQ_INS)
+    EditTextLim = 15
+    EditTextIn  = $(ComputerName)
+    EditFocus   = "ALL"
+[QueryComputerNameDlgASENG]
+    Caption     = "Windows NT-Setup"
+    DlgText     = "Windows NT benötigt einen Computernamen, um Ihren Computer "+
+                  "zu identifizieren. Geben Sie einen eindeutigen, maximal "+
+                  "15 Zeichen langen Namen ein."$(!LF)$(!LF)+
+                  "Stellen Sie sicher, daß dieser Name im gesamten Netzwerk eindeutig "+
+                  "ist. Andernfalls werden später Installationsprobleme auftreten. "
+    Edit1Label  = "&Computername:"
+    Continue    = "Fortsetzen"
+    Help        = "&Hilfe"
+    Exit        = "&Beenden"
+    DlgType     = "Edit"
+    DlgTemplate = "QUERY_COMPUTER_NAME"
+    HelpContext = $(!IDH_DB_COMPUTERNAMEQ_INS)
+    EditTextLim = 15
+    EditTextIn  = $(ComputerName)
+    EditFocus   = "ALL"
+[VerifyComputerNameDlgENG]
+    Caption      = "Windows NT-Setup"
+    DlgText      = "Überprüfen Sie, ob Ihr Computername korrekt eingegeben wurde. "$(!LF)$(!LF)+
+                   "Wählen Sie 'Ändern', wenn Sie ihn ändern möchten. "+
+                   "Wählen Sie andernfalls 'Fortsetzen'."
+    Static1Label = "Computername:"
+    Static1Text  = $(ComputerName)
+    Continue     = "Fortsetzen"
+    Cancel       = "Ä&ndern"
+    Help         = "&Hilfe"
+    Exit         = "&Beenden"
+    DlgType      = "Info"
+    DlgTemplate  = "VERIFY_COMPUTER_NAME"
+    HelpContext  = $(!IDH_DB_COMPUTERNAMEV_INS)
+[AccountDlgENG]
+    Caption     = "Lokales Konto einrichten"
+    DlgText     = "Setup kann ein lokales Konto für den Benutzer erstellen. "+
+                  "Geben Sie einen Benutzernamen von 15 Zeichen oder weniger "+
+                  "und ein Kennwort von 14 Zeichen oder weniger für dieses Konto ein. "+
+                  "Geben Sie das gleiche Kennwort in das Feld 'Kennwortbestätigung' ein.  "+
+		  "Wenn Sie kein Kennwort für dieses Konto haben möchten, "+
+                  "geben Sie nichts in die Felder 'Kennwort' und 'Kennwortbestätigung' ein."$(!LF)$(!LF)+
+		  "Sie können diesen Dialog auch abbrechen und später mit "+
+                  "Hilfe des Benutzer-Managers ein lokales Konto einrichten."
+    Edit1Label  = "Ben&utzername:"
+    Edit2Label  = "&Kennwort:"
+    Edit3Label  = "K&ennwortbestätigung:"
+    Continue    = "Fortsetzen"
+    Cancel      = "Abbrechen"
+    Help        = "&Hilfe"
+    Exit        = "&Beenden"
+    DlgType     = "MultiEdit"
+    DlgTemplate = "ACCOUNT_SETUP"
+    HelpContext = $(!IDH_DB_ACCOUNTSETUP_INS)
+    EditTextLim = {15, 14, 14}
+    EditTextIn  = {$(Username), "", ""}
+[AdminAccountDlgENG]
+    Caption     = "Konto für Administrator einrichten"
+    DlgText1    = "Geben Sie ein Kennwort von 14 Zeichen oder weniger "+
+                  "für das Administrator-Konto ein. Geben Sie das gleiche Kennwort in "+
+                  "das Feld 'Kennwortbestätigung' ein. "+
+                  "Das Kennwort darf keine Leerzeichen enthalten."$(!LF)$(!LF)+
+                  "Das Administrator-Konto erlaubt maximalen Zugriff auf die Ressourcen des "+
+                  "Computers. Daher ist das Kennwort des Administrators eine wichtige zu schützende "+
+                  "Information. "$(!LF)$(!LF)+
+                  "Anmerkung: Geben Sie besonders acht, daß Sie Ihr angegebenes Kennwort nicht "+
+                  "vergessen. Es wird empfohlen, das Kennwort aufzuschreiben und an einem sicheren "+
+                  "Platz aufzubewahren."
+    DlgText2    = "Benutzername:"
+    DlgText3    = "Administrator"
+    Edit1Label  = "&Kennwort:"
+    Edit2Label  = "K&ennwortbestätigung:"
+    Continue    = "Fortsetzen"
+    Help        = "&Hilfe"
+    Exit        = "&Beenden"
+    DlgType     = "MultiEdit"
+    DlgTemplate = "ADMIN_ACCOUNT_SETUP"
+    HelpContext = $(!IDH_DB_ACCOUNTADMN_INS)
+    EditTextLim = {14, 14}
+    EditTextIn  = {"", ""}
+[InstallModeDlgENG]
+    Caption     = "Installationsverfahren"
+    DlgText     = "Express-Setup installiert Windows NT Tools mit den Standardeinstellungen "+
+                  "und der erkannten Konfiguration"$(!LF)$(!LF)+
+                  "Benutzerdefiniertes Setup gibt Ihnen mehr Steuerung durch Anzeigen der erkannten Konfiguration "+
+                  "und Wählen der Optionen."$(!LF)$(!LF)+
+                  "Wählen Sie eine der beiden Installationsverfahren:"
+    Continue    = "Fortsetzen"
+    Help        = "&Hilfe"
+    Exit        = "&Beenden"
+    Radio1Text    = "&Express-Setup"
+    Radio2Text    = "B&enutzerdefiniertes Setup"
+    DlgType     = "Radio"
+    DlgTemplate = "INSTALLMODE"
+    HelpContext = $(!IDH_DB_INSTALLMODE_INS)
+    RadioHeader   = ""
+    RadioDefault  = $(InteractDefault)
+    OptionsGreyed = {}
+[OptionsDlgENG]
+    Caption     = "Windows NT-Setup"
+    DlgText     = "Setup wird die unten mit einem 'X' im Kontrollkästchen "+
+                  "markierten Aufgaben ausführen. "$(!LF)$(!LF)+
+                  "Um die ausgewählten Punkte auszuführen, wählen Sie 'Fortsetzen', "+
+                  "oder drücken Sie die EINGABETASTE."$(!LF)$(!LF)+
+                  "Um die Auswahl zu ändern, deaktivieren oder aktivieren Sie das entsprechende "+
+                  "Kontrollkästchen. Wählen Sie dann 'Fortsetzen', oder drücken Sie die EINGABETASTE."
+    Check1Text  = "Nur die gewählten &Windows NT-Komponenten einrichten"
+    Check2Text  = "&Drucker einrichten (nur lokal installierte Drucker)"
+    Check3Text  = "&Netzwerk einrichten"
+    Check4Text  = "&Anwendungen auf der/den Festplatte(n) einrichten"
+    Continue      = "Fortsetzen"
+    Help          = "&Hilfe"
+    Exit          = "&Beenden"
+    DlgType     = "Check"
+    DlgTemplate = "PDKOPTIONS"
+    HelpContext   = $(!IDH_DB_OPTIONS_INS)
+    CheckItemsIn = { $(!DoPartial),  $(!DoPrinter),   $(!DoNetwork), +
+                     $(!DoAppSetup)}
+[SetupDoneDlgENG]
+    Caption     = "Windows NT-Setup"
+    DlgText     = "Windows NT, Version 3.1, ist nun installiert."$(!LF)$(!LF)+
+                  "Entfernen Sie die Notfalldiskette aus Laufwerk A:, und "+
+                  "wählen Sie 'Neu starten', um das installierte System auszuführen."
+    Reboot      = "&Neu starten"
+    Windows     = "&Zurück zu Windows NT"
+    DlgType     = "Info"
+    DlgTemplate = "REBOOT"
+[SetupNotDoneDlgENG]
+    Caption     = "Windows NT-Setup"
+    DlgText     = "Windows NT, Version 3.1, wurde nicht installiert."$(!LF)$(!LF)+
+                  "Entfernen Sie alle Disketten aus Ihren Diskettenlaufwerken, und "+
+                  "wählen Sie 'Neu starten', um das System neu zu starten."
+    Reboot      = "&Neu starten"
+    Windows     = "&Zurück zu Windows NT"
+    DlgType     = "Info"
+    DlgTemplate = "REBOOT"
+[SetupDoneRestartDlgENG]
+    Caption     = "Windows NT-Setup"
+    DlgText     = "Windows NT-Systemdateien wurden zum Ziellaufwerk kopiert."$(LF)$(LF)+
+                  "Wählen Sie 'Zurück zu Windows NT'."
+    Windows     = "&Zurück zu Windows NT"
+    DlgType     = "Info"
+    DlgTemplate = "RESTART"
+[SetupNotDoneRestartDlgENG]
+    Caption     = "Windows NT Tools Setup"
+    DlgText     = "Das Kopieren der Systemdateien zum Ziellaufwerk ist fehlgeschlagen."$(LF)$(LF)+
+                  "Wählen Sie 'Zurück zu Windows NT'."
+    Windows     = "&Zurück zu Windows NT"
+    DlgType     = "Info"
+    DlgTemplate = "RESTART"
+[Warning1ENG]
+Warning = "Das Setup-Programm konnte die vorherige Konfiguration nicht sichern, "+
+          "um beim nächsten Mal fehlersicher zu starten. Wählen Sie 'OK', um fortzusetzen, "+
+          "oder wählen Sie 'Abbrechen', um Setup zu beenden."                           
+[Warning2ENG]
+Warning = "Es wird kein lokales Konto eingerichtet."
+[Warning3ENG]
+Warning = "Kein Kennwort wurde eingegeben. Wählen Sie 'OK', wenn Sie kein Kennwort "+
+          "eintragen möchten, oder wählen Sie 'Abbrechen', um ein Kennwort einzugeben."
+[FatalError1ENG]
+Fatal  = "Setup kann auf dem aktuellen Prozessor nicht installiert werden."$(!LF)$(!LF)"Installation kann nicht fortgesetzt werden."
+[FatalError2ENG]
+Fatal  = "Arbeitsspeicher des System ist nicht ausreichend. Mindestens "$(MinSystemMemory)"KB "+
+         "ist erforderlich"$(!LF)$(!LF)"Installation kann nicht fortgesetzt werden."
+[FatalError3ENG]
+Fatal  = "Setup konnte die Registrierung für Hardware-Optionen nicht ändern."$(!LF)$(!LF)"Installation kann nicht fortgesetzt werden."
+[FatalError4ENG]
+Fatal  = "Setup konnte den Computernamen nicht ändern."$(!LF)$(!LF)"Installation kann nicht fortgesetzt werden."
+[FatalError5ENG]
+Fatal  = "Setup konnte keinen Registrierungseintrag für die Windows NT-Software erstellen."$(!LF)$(!LF)"Installation kann nicht fortgesetzt werden."
+[FatalError6ENG]
+Fatal  = "Setup kann nicht direkt ausgeführt werden, um Ihr Windows NT-System zu aktualisieren. "+
+         "Lesen Sie in Ihren Handbüchern nach, wie Setup ausgeführt wird."
+[FatalError7ENG]
+Fatal  = "Flexboot-Installation ist fehlgeschlagen. Installation kann nicht fortgesetzt werden. "+
+         "Wenden Sie sich an Ihren Systemadministrator."
+[FatalError8ENG]
+Fatal  = "Auf dem Quellaufwerk sind keine Windows NT-Setupquellen. "
+[FatalError9ENG]
+Fatal  = "Setup konnte die Sicherheit auf Ihrem Computer nicht initialisieren. "+
+         "Die Installation wird unterbrochen."
+[FatalError10ENG]
+Fatal = "Setup konnte Ihr System nicht für einen sicheren Betrieb einrichten." 
+[FatalError11ENG]
+Fatal = "Die Datei INITIAL.INF paßt nicht zu Ihrem Computer."
+[FatalError12ENG]
+Fatal = "Setup konnte nicht die Standardkonfigurationsdatei des Benutzers erstellen. "+
+        "Ohne diese Datei kann sich kein Benutzer bei Windows NT anmelden."
+[FatalError13ENG]
+Fatal = "Setup konnte den Wert für SystemSetupInProgress nicht zurücksetzen, um "+
+        "anzuzeigen, daß die Installation vollständig durchgeführt wurde."
+[FatalError14ENG]
+Fatal = "UNC-Namen werden beim ersten Setup nicht unterstützt."
+[FatalError17ENG]
+Fatal  = "Kein freies Laufwerk verfügbar, um zu einem UNC-Laufwerk zu verbinden."
+[FatalError18ENG]
+Fatal  = "Fehler während des Zugriffs auf das Quellaufwerk."
+[NonFatalError1ENG]
+NonFatal = "Setup kann nicht korrekt ausgeführt werden, wenn Sie keinen Namen eingeben."
+[NonFatalError2ENG]
+NonFatal = "Die Installation von Konfigurationsdateien für das MS-DOS-Teilsystem "+
+           "ist fehlgeschlagen. Fehler wird ignoriert."
+[NonFatalError3ENG]
+NonFatal = "Setup konnte keine Konfigurationsinformationen für die Auslagerungsdatei ermitteln. "+
+           "Setup wird die Installation auf Ihrem Computer mit der Standardauslagerungsdatei fortsetzen. "+
+           "Die Größe der Auslagerungsdatei kann nach der Installation im Dialog 'System' "+
+           "der Systemsteuerung festgelegt werden."
+[NonFatalError4ENG]
+NonFatal = "Setup konnte keine Druckerinformationen ermitteln. Setup wird keine "+
+           "Drucker auf Ihrem System installieren. Drucker können nach der "+
+           "Systeminstallation mit Hilfe des Druck-Managers installiert werden."
+[NonFatalError5ENG]
+NonFatal = "Setup kann nicht korrekt ausgeführt werden, wenn die erforderlichen Informationen nicht eingegeben werden."
+[NonFatalError6ENG]
+NonFatal = "Setup konnte die Auslagerungsdatei auf Ihrem Computer nicht konfigurieren. "+
+           "Windows NT wird weiterhin die Standardauslagerungsdatei benutzen. "+
+           "Fehler wird ignoriert."
+[NonFatalError7ENG]
+NonFatal = "Sie dürfen ""."" oder "".."" nicht als Computernamen verwenden."
+[NonFatalError7aENG]
+NonFatal = "Computernamen dürfen nicht mit einem Leerzeichen anfangen oder aufhören, "+
+           "und die folgenden Zeichen sind in Computernamen nicht erlaubt:"$(!LF)+
+           "/ \ [ ] "" : ; | < > + = , ? *"
+[NonFatalError8ENG]
+NonFatal  = "Konfiguration der Drucker ist fehlgeschlagen."$(!LF)$(!LF)"Es wurde kein "+
+            "Drucker installiert. Drucker können auch nach der Systeminstallation mit "+
+            "Hilfe des Druck-Managers eingerichtet werden."
+[NonFatalError9ENG]
+NonFatal  = "Initialisierung der Druckerunterstützung ist fehlgeschlagen."$(!LF)$(!LF)+
+            "Kein Drucker wurde installiert."
+[NonFatalError10ENG]
+NonFatal = "Die Felder 'Kennwort' und 'Kennwortbestätigung' sind verschieden. "+
+           "Geben Sie beide noch einmal ein."
+[NonFatalError12ENG]
+NonFatal = "Der Ereignisprotokollierdienst konnte nicht aktiviert werden."
+[NonFatalError13ENG]
+NonFatal = "Setup konnte das Teilsystem für Windows16-Kompatibilität nicht "+
+           "konfigurieren. Setup wird diesen Fehler ignorieren."
+[NonFatalError14ENG]
+NonFatal = "Benutzernamen dürfen nicht mit einem Leerzeichen anfangen oder aufhören, "+
+           "und folgende Zeichen sind in Benutzernamen nicht erlaubt:"$(!LF)+
+           "/ \ [ ] "" : ; | < > + = , ? *"
+[NonFatalError15ENG]
+NonFatal = "Sie müssen einen Benutzernamen für die Einrichtung eines lokalen Kontos eingeben, oder "+
+           "wählen Sie 'Abbrechen', wenn Sie kein lokales Konto erstellen möchten."
+[NonFatalError16ENG]
+NonFatal = "Ein lokales Konto für den eingegebenen Benutzernamen existiert bereits. "+
+           "Wählen Sie einen anderen Benutzernamen."
+[Status1ENG]
+Status = "Der Drucker '"$(PrinterName)"' wurde zur Benutzung unter Windows NT "+
+         "eingerichtet."
+[BillboardsENG]
+Billboard1 = "Bitte warten Sie..."
+Billboard2 = "Setup konfiguriert Ihr System für FlexBoot. Bitte warten Sie..."
+Billboard3 = "Setup konfiguriert Ihre Hardware-Optionen. Bitte warten Sie..."
+Billboard4 = "Setup konfiguriert Ihre Registrierung. Bitte warten Sie..."
+Billboard5 = "Setup übernimmt Informationen von vorher installierten DOS-Systemen. "+
+             "Bitte warten Sie..."
+Billboard6 = "Setup konfiguriert die Auslagerungsdatei für Ihr Windows NT-System. "+
+             "Bitte warten Sie..."
+Billboard7 = "Setup konfiguriert Drucker. Bitte warten Sie..."
+Billboard8 = "Setup erstellt Konten in Ihrer Sicherheitsdatenbank. Bitte warten Sie..."
+Billboard9 = "Setup übernimmt Informationen von vorher installierten Windows-Systemen. "+
+             "Bitte warten Sie..."
+Billboard10 = "Setup entfernt temporäre Dateien. Bitte warten Sie..."
+Billboard11 = "Setup installiert Schriftarten. Bitte warten Sie..."
+[DateTimeENG]
+Applet = "Datum/Zeit"
+[FontList]
+"Arial (TrueType)"                         = ARIAL.FOT
+"Arial Fett (TrueType)"                    = ARIALBD.FOT
+"Arial Fett Kursiv (TrueType)"             = ARIALBI.FOT
+"Arial Kursiv (TrueType)"                  = ARIALI.FOT
+"Courier New (TrueType)"                   = COUR.FOT
+"Courier New Fett (TrueType)"              = COURBD.FOT
+"Courier New Fett Kursiv (TrueType)"       = COURBI.FOT
+"Courier New Kursiv (TrueType)"            = COURI.FOT
+"Modern (Plotter)"                         = MODERN.FON
+"Roman (Plotter)"                          = ROMAN.FON
+"Script (Plotter)"                         = SCRIPT.FON
+"Symbol (TrueType)"                        = SYMBOL.FOT
+"Times New Roman (TrueType)"               = TIMES.FOT
+"Times New Roman Fett (TrueType)"          = TIMESBD.FOT
+"Times New Roman Fett Kursiv (TrueType)"   = TIMESBI.FOT
+"Times New Roman Kursiv (TrueType)"        = TIMESI.FOT
+"WingDings (TrueType)"                     = WINGDING.FOT
+[FontListE]
+"Small Fonts (VGA-Auflösung)"                    = SMALLE.FON
+"Symbol 8,10,12,14,18,24 (VGA-Auflösung)"        = SYMBOLE.FON
+[FontListF]
+"Small Fonts (8514/a-Auflösung)"                 = SMALLF.FON
+"Symbol 8,10,12,14,18,24 (8514/a-Auflösung)"     = SYMBOLF.FON
+
+
+

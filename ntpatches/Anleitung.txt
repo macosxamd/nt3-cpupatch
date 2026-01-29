@@ -1,0 +1,42 @@
+PII Patch für NT 3.1 & NT 3.5
+
+Dieser Patch ist notwendig wenn NT 3.1 und NT 3.5
+auf Rechnern installiert wird, in denen ein
+PII oder vergleichbares steckt.
+Normaler Weise würde sich das Setup aufhängen.
+
+Installation:
+0) Festplatte muss ein fertig vorbereitetes 
+   FAT16 System sein.
+1) Mit einer Win9x/DOS Bootdiskette das Setup
+   starten, nachdem die Setup Dateien kopiert
+   wurden, will NT 3.x neustarten. Jetzt schaltet
+   man den PC aus.
+2) Jetzt startet man wieder mit einer bootfähigen
+   Diskette und kopiert die Dateien des jeweiligen
+   Unterordners in das Verzeichnis: "c:\$WIN_NT$.~LS"
+   (Ohne Anführungszeichen)
+3) Danach geht das Setup mit den Bootdisketten von NT3.1
+   nach einen NEustart wieder normal weiter.
+
+Patch Versionen:
+
+Ordner Winnt31:
+
+Windows NT 3.1
+für das Servicepack 3 ist im Unterordner
+NT310sp3 wieder ein Update
+
+Ordner Winnt35
+für Windows NT 3.5 
+(nicht NT 3.51,hier wird keins benötigt)
+
+Ordner Winnt35s
+für Windows NT 3.5 Server
+
+Für mehr Informationen
+gehen sie bitte in das Forum von
+
+www.winhistory.de
+
+Danke an Eddie für die technische Unterstützung
